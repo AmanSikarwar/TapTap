@@ -39,7 +39,6 @@
         android:supportsRtl="true"
         android:name=".TapTap"
         android:enableOnBackInvokedCallback="true"
-        android:extractNativeLibs="true"
         android:theme="@style/Theme.TapTap.Splash"
         tools:targetApi="tiramisu">
 

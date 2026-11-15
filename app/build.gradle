@@ -1,7 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs'
     id 'dev.rikka.tools.refine'
@@ -49,16 +47,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
     buildFeatures {
         buildConfig true
         viewBinding true
         aidl true
     }
-    lintOptions {
-        checkReleaseBuilds true
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
     namespace 'com.kieronquinn.app.taptap'
 }
@@ -153,7 +150,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     //Autostarter provides some OEM battery checks + starting settings for disabling them
-    implementation 'com.github.judemanutd:autostarter:1.1.0'
+    implementation('com.github.judemanutd:autostarter:1.1.0') {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-android-extensions-runtime'
+    }
 
     //Markdown support
     implementation "io.noties.markwon:core:4.6.2"
