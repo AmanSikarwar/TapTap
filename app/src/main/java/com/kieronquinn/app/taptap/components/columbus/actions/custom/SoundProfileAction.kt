@@ -3,6 +3,7 @@ package com.kieronquinn.app.taptap.components.columbus.actions.custom
 import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
+import android.os.Build
 import androidx.lifecycle.Lifecycle
 import com.google.android.columbus.feedback.FeedbackEffect
 import com.google.android.columbus.sensors.GestureSensor
@@ -40,6 +41,7 @@ class SoundProfileAction(
         detectionProperties: GestureSensor.DetectionProperties,
         isTripleTap: Boolean
     ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN && showAccessibilityNotificationIfNeeded()) return
         currentProfileAction = audioManager.ringerMode
         when (currentProfileAction) {
             0 -> {

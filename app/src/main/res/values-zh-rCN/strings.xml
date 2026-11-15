@@ -486,8 +486,8 @@
     <string name="gate_foldable_open_desc">当设备展开/打开时，暂时禁用手势</string>
     <string name="gate_foldable_open_desc_when">仅在设备展开/打开时运行动作</string>
     <string name="gate_low_battery">低电量</string>
-    <string name="gate_low_battery_desc">当设备电量低于 15% 时，暂时禁用手势</string>
-    <string name="gate_low_battery_desc_when">仅当设备电量低于 15 % 时运行</string>
+    <string name="gate_low_battery_desc" formatted="false">当设备电量低于 15% 时，暂时禁用手势</string>
+    <string name="gate_low_battery_desc_when" formatted="false">仅当设备电量低于 15 % 时运行</string>
     <string name="gate_battery_saver">省电模式</string>
     <string name="gate_battery_saver_desc">当设备处于省电模式时，暂时禁用手势</string>
     <string name="gate_battery_saver_desc_when">仅当设备处于省电模式时运行</string>

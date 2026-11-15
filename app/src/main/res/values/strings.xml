@@ -516,8 +516,8 @@
     <string name="gate_foldable_open_desc">Blocks the gesture if the device is unfolded / open</string>
     <string name="gate_foldable_open_desc_when">Run only when the device is unfolded / open</string>
     <string name="gate_low_battery">Low Battery</string>
-    <string name="gate_low_battery_desc">Blocks the gesture when the device has less than 15% battery remaining</string>
-    <string name="gate_low_battery_desc_when">Run only when the device has less than 15% battery remaining</string>
+    <string name="gate_low_battery_desc" formatted="false">Blocks the gesture when the device has less than 15% battery remaining</string>
+    <string name="gate_low_battery_desc_when" formatted="false">Run only when the device has less than 15% battery remaining</string>
     <string name="gate_battery_saver">Battery Saver</string>
     <string name="gate_battery_saver_desc">Blocks the gesture when the system Battery Saver is enabled</string>
     <string name="gate_battery_saver_desc_when">Run only when the system Battery Saver is enabled</string>

@@ -10,9 +10,9 @@ import androidx.navigation.fragment.NavHostFragment
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.kieronquinn.app.taptap.ui.activities.MainActivity
 import com.kieronquinn.app.taptap.ui.activities.MainActivity.Companion.EXTRA_SUPPRESS_SPLASH_DELAY
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.collect
 
 interface BaseNavigation {
@@ -41,35 +41,35 @@ sealed class NavigationEvent {
 
 open class NavigationImpl: BaseNavigation {
 
-    private val _navigationBus = MutableSharedFlow<NavigationEvent>()
-    override val navigationBus = _navigationBus.asSharedFlow()
+    private val _navigationBus = Channel<NavigationEvent>(Channel.BUFFERED)
+    override val navigationBus = _navigationBus.receiveAsFlow()
 
     override suspend fun navigate(id: Int, arguments: Bundle?) {
-        _navigationBus.emit(NavigationEvent.Id(id, arguments))
+        _navigationBus.send(NavigationEvent.Id(id, arguments))
     }
 
     override suspend fun navigate(navDirections: NavDirections) {
-        _navigationBus.emit(NavigationEvent.Directions(navDirections))
+        _navigationBus.send(NavigationEvent.Directions(navDirections))
     }
 
     override suspend fun navigateBack() {
-        _navigationBus.emit(NavigationEvent.Back)
+        _navigationBus.send(NavigationEvent.Back)
     }
 
     override suspend fun navigateUpTo(id: Int, popInclusive: Boolean) {
-        _navigationBus.emit(NavigationEvent.PopupTo(id, popInclusive))
+        _navigationBus.send(NavigationEvent.PopupTo(id, popInclusive))
     }
 
     override suspend fun navigate(intent: Intent) {
-        _navigationBus.emit(NavigationEvent.Intent(intent))
+        _navigationBus.send(NavigationEvent.Intent(intent))
     }
 
     override suspend fun restartActivity() {
-        _navigationBus.emit(NavigationEvent.RestartActivity)
+        _navigationBus.send(NavigationEvent.RestartActivity)
     }
 
     override suspend fun phoenix() {
-        _navigationBus.emit(NavigationEvent.Phoenix)
+        _navigationBus.send(NavigationEvent.Phoenix)
     }
 
 }

@@ -516,8 +516,8 @@
     <string name="gate_foldable_open_desc">Blockiert Gesten, wenn dein Gerät nicht gefaltet / offen ist.</string>
     <string name="gate_foldable_open_desc_when">Nur ausführen, wenn dein Gerät nicht gefaltet / offen ist.</string>
     <string name="gate_low_battery">Niedriger Batteriestand</string>
-    <string name="gate_low_battery_desc">Blockiert Gesten, wenn dein Akku weniger als 15% hat.</string>
-    <string name="gate_low_battery_desc_when">Nur ausführen, wenn dein Akku weniger als 15% hat.</string>
+    <string name="gate_low_battery_desc" formatted="false">Blockiert Gesten, wenn dein Akku weniger als 15% hat.</string>
+    <string name="gate_low_battery_desc_when" formatted="false">Nur ausführen, wenn dein Akku weniger als 15% hat.</string>
     <string name="gate_battery_saver">Energiesparmodus</string>
     <string name="gate_battery_saver_desc">Blockiert Gesten, wenn der Energiesparmodus deines Geräts aktiviert ist.</string>
     <string name="gate_battery_saver_desc_when">Nur ausführen, wenn der Energiesparmodus deines Geräts aktiviert ist.</string>

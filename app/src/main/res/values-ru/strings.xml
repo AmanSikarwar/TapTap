@@ -484,8 +484,8 @@
     <string name="gate_foldable_open_desc">Блокировать жест в разложенном / раскрытом положении складного устройства</string>
     <string name="gate_foldable_open_desc_when">Запускать только из разложенного / раскрытого положения складного устройства</string>
     <string name="gate_low_battery">Низкий заряд батареи</string>
-    <string name="gate_low_battery_desc">Блокировать жест, если осталось меньше 15% заряда батареи</string>
-    <string name="gate_low_battery_desc_when">Запускать только если осталось меньше 15% заряда батареи</string>
+    <string name="gate_low_battery_desc" formatted="false">Блокировать жест, если осталось меньше 15% заряда батареи</string>
+    <string name="gate_low_battery_desc_when" formatted="false">Запускать только если осталось меньше 15% заряда батареи</string>
     <string name="gate_battery_saver">Режим энергосбережения</string>
     <string name="gate_battery_saver_desc">Блокировать жест при включенном системном режиме энергосбережения</string>
     <string name="gate_battery_saver_desc_when">Запускать только при включенном системном режиме энергосбережения</string>

@@ -16,6 +16,7 @@ import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -24,8 +25,8 @@ import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.components.blur.BlurProvider
 import com.kieronquinn.app.taptap.utils.extensions.awaitPost
 import com.kieronquinn.app.taptap.utils.extensions.isDarkMode
-import com.kieronquinn.app.taptap.utils.extensions.whenResumed
 import com.kieronquinn.monetcompat.core.MonetCompat
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 abstract class BaseBottomSheetFragment<T: ViewBinding>(private val inflate: (LayoutInflater, ViewGroup?, Boolean) -> T): BottomSheetDialogFragment() {
@@ -142,7 +143,7 @@ abstract class BaseBottomSheetFragment<T: ViewBinding>(private val inflate: (Lay
     private fun applyBlur(ratio: Float){
         val dialogWindow = dialog?.window ?: return
         val appWindow = activity?.window ?: return
-        whenResumed {
+        lifecycleScope.launch {
             dialogWindow.decorView.awaitPost()
             blurProvider.applyDialogBlur(dialogWindow, appWindow, ratio)
         }
@@ -151,10 +152,7 @@ abstract class BaseBottomSheetFragment<T: ViewBinding>(private val inflate: (Lay
     override fun onResume() {
         super.onResume()
         if(isBlurShowing){
-            whenResumed {
-                view?.awaitPost()
-                applyBlur(1f)
-            }
+            applyBlur(1f)
         }
     }
 

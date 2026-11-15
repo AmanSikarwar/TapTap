@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.components.accessibility.TapTapAccessibilityRouter
@@ -36,6 +37,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -183,7 +185,7 @@ abstract class SettingsGatesAddGenericFragment<T : ViewBinding>(inflate: (Layout
 
     override fun onResume() {
         super.onResume()
-        whenResumed {
+        viewLifecycleOwner.lifecycleScope.launch {
             onResume.emit(Unit)
         }
     }
