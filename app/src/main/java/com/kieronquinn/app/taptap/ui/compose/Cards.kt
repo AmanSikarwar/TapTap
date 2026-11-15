@@ -1,6 +1,7 @@
 package com.kieronquinn.app.taptap.ui.compose
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -35,13 +37,15 @@ fun MessageCard(
     onClick: (() -> Unit)? = null,
     linkClicked: ((String) -> Unit)? = null,
     onDismiss: (() -> Unit)? = null,
+    tintIcon: Boolean = true,
     actions: (@Composable () -> Unit)? = null
 ) {
     val colors = CardDefaults.cardColors(containerColor = containerColor)
     val body = @Composable {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(painterResource(icon), null)
+                if (tintIcon) Icon(painterResource(icon), null)
+                else Image(painterResource(icon), null, Modifier.size(40.dp))
                 Column(Modifier.weight(1f).padding(start = 16.dp)) {
                     title?.let { Text(it, style = MaterialTheme.typography.titleMedium) }
                     Text(text.toAnnotatedString(linkClicked), style = MaterialTheme.typography.bodyMedium)

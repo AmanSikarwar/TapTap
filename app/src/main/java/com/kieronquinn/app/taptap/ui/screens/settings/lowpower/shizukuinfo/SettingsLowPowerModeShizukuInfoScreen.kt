@@ -40,14 +40,16 @@ fun ShizukuCards(onShizuku: () -> Unit, onSui: () -> Unit) {
     MessageCard(
         R.drawable.ic_shizuku,
         stringResource(R.string.settings_shared_shizuku_permission_flow_error_card_shizuku_content),
-        title = stringResource(R.string.settings_shared_shizuku_permission_flow_error_card_shizuku_title)
+        title = stringResource(R.string.settings_shared_shizuku_permission_flow_error_card_shizuku_title),
+        tintIcon = false
     ) {
         Button(onClick = onShizuku) { Text(stringResource(R.string.settings_shared_shizuku_permission_flow_error_card_shizuku_button)) }
     }
     MessageCard(
         R.drawable.ic_sui,
         stringResource(R.string.settings_shared_shizuku_permission_flow_error_card_sui_content),
-        title = stringResource(R.string.settings_shared_shizuku_permission_flow_error_card_sui_title)
+        title = stringResource(R.string.settings_shared_shizuku_permission_flow_error_card_sui_title),
+        tintIcon = false
     ) {
         Button(onClick = onSui) { Text(stringResource(R.string.settings_shared_shizuku_permission_flow_error_card_sui_button)) }
     }
