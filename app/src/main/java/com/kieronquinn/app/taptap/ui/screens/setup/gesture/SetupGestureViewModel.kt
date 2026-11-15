@@ -18,7 +18,6 @@ import com.kieronquinn.app.taptap.repositories.phonespecs.PhoneSpecsRepository
 import com.kieronquinn.app.taptap.service.foreground.TapTapForegroundService
 import com.kieronquinn.app.taptap.ui.screens.setup.base.BaseSetupViewModel
 import com.kieronquinn.app.taptap.utils.extensions.instantCombine
-import com.kieronquinn.monetcompat.core.MonetCompat
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex

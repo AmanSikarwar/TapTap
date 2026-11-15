@@ -39,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
@@ -155,7 +156,8 @@ fun SetupGestureScreen(viewModel: SetupGestureViewModel = koinViewModel()) {
                                     else -> R.drawable.ic_chevron_expand
                                 }
                             ),
-                            null
+                            null,
+                            Modifier.rotate(if (configStack.size == 1 && !expanded) 180f else 0f)
                         )
                     }
                     Text(stringResource(top.titleRes), style = MaterialTheme.typography.titleLarge)

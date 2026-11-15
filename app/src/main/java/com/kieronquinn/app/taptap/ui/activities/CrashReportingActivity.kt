@@ -37,7 +37,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 /**
- *  This activity is intentionally barebones - no fragments, Monet, and minimal library use.
+ *  This activity is intentionally barebones - no fragments and minimal library use.
  *  It should be able to handle an incoming crash from the extras, show it and export it.
  */
 class CrashReportingActivity : ComponentActivity() {

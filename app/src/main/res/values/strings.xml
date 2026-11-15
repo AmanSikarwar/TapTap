@@ -242,8 +242,6 @@
     <string name="setting_advanced_restart_service_desc">Attempt to automatically restart the Tap, Tap listener component once an hour.</string>
     <string name="setting_advanced_legacy_wake">Legacy Wake Device method</string>
     <string name="setting_advanced_legacy_wake_desc">Use the legacy method of waking the device with the \'Wake Device\' option enabled. This may not work on all devices, but may be more reliable in a few rare cases.</string>
-    <string name="settings_advanced_monet_color_picker">Wallpaper Colour</string>
-    <string name="settings_advanced_monet_color_picker_desc">Choose the colour from your wallpaper to use throughout Tap, Tap\'s UI</string>
     <string name="setting_advanced_custom_sensitivity">Custom sensitivity</string>
     <string name="setting_advanced_custom_sensitivity_desc">Set a custom sensitivity value for the gesture.\nImportant: Only use this if <b>none</b> of the built in sensitivity values are working for you</string>
     <string name="bs_advanced_custom_sensitivity">Custom Sensitivity</string>

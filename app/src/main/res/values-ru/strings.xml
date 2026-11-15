@@ -216,8 +216,6 @@
     <string name="setting_advanced_restart_service_desc">Перезапускать фоновые процессы Tap, Tap раз в час. Обеспечивает надежность работы службы распознавания жеста.</string>
     <string name="setting_advanced_legacy_wake">Устаревший метод пробуждения устройства</string>
     <string name="setting_advanced_legacy_wake_desc">Использовать классический метод для работы опции «Включение устройства». Работает не на всех устройствах, но в редких случаях может оказаться более надежным решением.</string>
-    <string name="settings_advanced_monet_color_picker">Цвет темы из обоев</string>
-    <string name="settings_advanced_monet_color_picker_desc">Для интерфейса Tap, Tap использовать палитру на основе цвета ваших обоев</string>
     <string name="setting_advanced_custom_sensitivity">Свое значение чувствительности</string>
     <string name="setting_advanced_custom_sensitivity_desc">Установить другой порог чувствительности при распознавании жеста.\nВажно: меняйте только в том случае, если вам не подошел <b>ни один</b> из предустановленных вариантов</string>
     <string name="bs_advanced_custom_sensitivity">Свой параметр</string>
