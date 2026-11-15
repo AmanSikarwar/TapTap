@@ -2,7 +2,6 @@ package com.kieronquinn.app.taptap.ui.screens.settings.more
 
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.ui.base.CanShowSnackbar
-import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsAdapter
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsFragment
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,11 +46,5 @@ class SettingsMoreFragment: GenericSettingsFragment(), CanShowSnackbar {
             )
         )
     }
-
-    override fun createAdapter(items: List<GenericSettingsViewModel.SettingsItem>): GenericSettingsAdapter {
-        return SettingsMoreAdapter()
-    }
-
-    inner class SettingsMoreAdapter: GenericSettingsAdapter(requireContext(), binding.settingsGenericRecyclerView, items)
 
 }

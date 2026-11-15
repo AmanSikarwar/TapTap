@@ -4,17 +4,12 @@ import android.os.Bundle
 import android.view.View
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.ui.base.BackAvailable
-import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsAdapter
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsFragment
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel.SettingsItem
 import com.kieronquinn.app.taptap.utils.extensions.whenResumed
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsBatteryFragment : GenericSettingsFragment(), BackAvailable {
-
-    private val adapter by lazy {
-        SettingsBatteryAdapter()
-    }
 
     override val viewModel by viewModel<SettingsBatteryViewModel>()
 
@@ -57,10 +52,6 @@ class SettingsBatteryFragment : GenericSettingsFragment(), BackAvailable {
         )
     }
 
-    override fun createAdapter(items: List<SettingsItem>): GenericSettingsAdapter {
-        return adapter
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupHeaderDismiss()
@@ -68,17 +59,14 @@ class SettingsBatteryFragment : GenericSettingsFragment(), BackAvailable {
 
     private fun setupHeaderDismiss() = whenResumed {
         viewModel.showHeader.collect {
-            adapter.refreshVisibleItems()
+            refreshVisibleItems()
         }
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
-        adapter.refreshVisibleItems()
+        refreshVisibleItems()
     }
-
-    inner class SettingsBatteryAdapter :
-        GenericSettingsAdapter(requireContext(), binding.settingsGenericRecyclerView, items)
 
 }

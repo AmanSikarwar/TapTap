@@ -9,6 +9,6 @@
         android:id="@+id/containerFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.container.ContainerFragment"
         android:label="ContainerFragment"
-        tools:layout="@layout/fragment_container" />
+ />
 
 </navigation>

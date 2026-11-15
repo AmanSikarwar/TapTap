@@ -9,6 +9,6 @@
         android:id="@+id/settingsSharedAppShortcutsSelectorFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.appshortcuts.SettingsSharedAppShortcutsSelectorFragment"
         android:label="@string/action_launch_app_shortcut"
-        tools:layout="@layout/fragment_settings_shared_app_shortcuts_selector"/>
+/>
 
 </navigation>

@@ -9,7 +9,7 @@
         android:id="@+id/setupGestureConfigurationFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.setup.gesture.configuration.SetupGestureConfigurationFragment"
         android:label="@string/setup_gesture_toolbar"
-        tools:layout="@layout/fragment_settings_generic" >
+ >
         <action
             android:id="@+id/action_setupGestureConfigurationFragment_to_setupGestureModelPicker"
             app:destination="@id/setupGestureModelPicker" />
@@ -18,6 +18,6 @@
         android:id="@+id/setupGestureModelPicker"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.modelpicker.SettingsModelPickerFragment"
         android:label="@string/setting_gesture_model"
-        tools:layout="@layout/fragment_settings_model_picker" />
+ />
 
 </navigation>

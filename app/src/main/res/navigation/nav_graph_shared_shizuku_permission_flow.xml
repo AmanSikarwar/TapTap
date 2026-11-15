@@ -9,7 +9,7 @@
         android:id="@+id/settingsSharedShizukuPermissionFlowFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.shared.shizuku.SettingsSharedShizukuPermissionFlowFragment"
         android:label="@string/settings_shared_shizuku_permission_flow_toolbar_title"
-        tools:layout="@layout/fragment_settings_shared_shizuku_permission_flow" >
+ >
         <argument
             android:name="argument"
             app:argType="com.kieronquinn.app.taptap.models.shared.SharedArgument" />

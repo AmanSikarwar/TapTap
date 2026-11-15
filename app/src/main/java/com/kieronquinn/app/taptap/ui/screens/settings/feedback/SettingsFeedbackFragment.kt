@@ -2,7 +2,6 @@ package com.kieronquinn.app.taptap.ui.screens.settings.feedback
 
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.ui.base.BackAvailable
-import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsAdapter
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsFragment
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,11 +32,5 @@ class SettingsFeedbackFragment: GenericSettingsFragment(), BackAvailable {
             )
         )
     }
-
-    override fun createAdapter(items: List<GenericSettingsViewModel.SettingsItem>): GenericSettingsAdapter {
-        return SettingsFeedbackAdapter()
-    }
-
-    inner class SettingsFeedbackAdapter: GenericSettingsAdapter(requireContext(), binding.settingsGenericRecyclerView, items)
 
 }

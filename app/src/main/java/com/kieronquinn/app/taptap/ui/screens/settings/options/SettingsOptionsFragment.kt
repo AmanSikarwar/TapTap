@@ -1,34 +1,25 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.options
 
-import android.os.Bundle
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kieronquinn.app.taptap.ui.compose.ServiceSwitchCard
+import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsFragment
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
-import com.kieronquinn.app.taptap.databinding.FragmentSettingsOptionsBinding
-import com.kieronquinn.app.taptap.ui.base.BoundFragment
 import com.kieronquinn.app.taptap.ui.base.CanShowSnackbar
 import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
-import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsAdapter
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel.SettingsItem
-import com.kieronquinn.app.taptap.utils.extensions.applyBottomInsets
-import com.kieronquinn.app.taptap.utils.extensions.onClicked
-import com.kieronquinn.app.taptap.utils.extensions.whenResumed
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsOptionsFragment: BoundFragment<FragmentSettingsOptionsBinding>(FragmentSettingsOptionsBinding::inflate), CanShowSnackbar {
+class SettingsOptionsFragment: GenericSettingsFragment(), CanShowSnackbar {
 
-    private val viewModel by viewModel<SettingsOptionsViewModel>()
+    override val viewModel by viewModel<SettingsOptionsViewModel>()
     private val sharedViewModel by activityViewModel<ContainerSharedViewModel>()
-    private val containerViewModel by activityViewModel<ContainerSharedViewModel>()
 
-    private val adapter by lazy {
-        SettingsOptionsAdapter()
-    }
 
-    private val items by lazy {
+    override val items by lazy {
         listOf(
             SettingsItem.Text(
                 icon = R.drawable.ic_setting_low_power_mode,
@@ -110,55 +101,15 @@ class SettingsOptionsFragment: BoundFragment<FragmentSettingsOptionsBinding>(Fra
         )
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupSwitch()
-        setupRecyclerView()
-        setupRestart()
-    }
-
-    private fun setupSwitch(){
-        binding.settingsOptionsEnableTapTap.isChecked = sharedViewModel.isServiceRunning.value
-        whenResumed {
-            with(binding.settingsOptionsEnableTapTap) {
-                launch {
-                    sharedViewModel.isServiceRunning.collect {
-                        isChecked = it
-                    }
-                }
-                launch {
-                    onClicked().collect {
-                        sharedViewModel.toggleServiceEnabledState(it.context)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setupRecyclerView() = with(binding.settingsOptionsRecyclerView) {
-        layoutManager = LinearLayoutManager(context)
-        adapter = this@SettingsOptionsFragment.adapter
-        applyBottomInsets(binding.root)
-    }
-
-    private fun setupRestart() {
-        whenResumed {
-            viewModel.restartService?.collect {
-                containerViewModel.restartService(requireContext())
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        binding.settingsOptionsRecyclerView.adapter = null
-        super.onDestroyView()
+    override val header: @Composable () -> Unit = {
+        val running by sharedViewModel.isServiceRunning.collectAsStateWithLifecycle()
+        ServiceSwitchCard(running, { sharedViewModel.toggleServiceEnabledState(requireContext()) })
     }
 
     override fun onResume() {
         super.onResume()
-        adapter.refreshVisibleItems()
+        refreshVisibleItems()
     }
 
-    inner class SettingsOptionsAdapter: GenericSettingsAdapter(requireContext(), binding.settingsOptionsRecyclerView, items)
 
 }

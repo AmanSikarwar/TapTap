@@ -2,7 +2,6 @@ package com.kieronquinn.app.taptap.ui.screens.settings.contributions
 
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.ui.base.BackAvailable
-import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsAdapter
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsFragment
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel.SettingsItem
 import com.kieronquinn.app.taptap.utils.extensions.getResourceIdArray
@@ -36,10 +35,6 @@ class SettingsContributionsFragment: GenericSettingsFragment(), BackAvailable {
         )
     }
 
-    override fun createAdapter(items: List<SettingsItem>): GenericSettingsAdapter {
-        return SettingsContributionsAdapter()
-    }
-
     private fun getTranslatorsList(): List<SettingsItem.Text> {
         val headings = resources.getResourceIdArray(R.array.about_translators_headings)
         val content = resources.getResourceIdArray(R.array.about_translators_content)
@@ -52,7 +47,5 @@ class SettingsContributionsFragment: GenericSettingsFragment(), BackAvailable {
             )
         }
     }
-
-    inner class SettingsContributionsAdapter: GenericSettingsAdapter(requireContext(), binding.settingsGenericRecyclerView, items)
 
 }

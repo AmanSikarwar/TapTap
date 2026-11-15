@@ -3,7 +3,6 @@ package com.kieronquinn.app.taptap.ui.screens.settings.advanced
 import android.os.Build
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.ui.base.BackAvailable
-import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsAdapter
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsFragment
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel.SettingsItem
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,11 +45,5 @@ class SettingsAdvancedFragment: GenericSettingsFragment(), BackAvailable {
             )
         )
     }
-
-    override fun createAdapter(items: List<SettingsItem>): GenericSettingsAdapter {
-        return SettingsAdvancedAdapter()
-    }
-
-    inner class SettingsAdvancedAdapter: GenericSettingsAdapter(requireContext(), binding.settingsGenericRecyclerView, items)
 
 }

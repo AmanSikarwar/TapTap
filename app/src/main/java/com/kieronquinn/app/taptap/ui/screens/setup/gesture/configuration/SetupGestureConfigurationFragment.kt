@@ -1,12 +1,11 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.gesture.configuration
 
-import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.runtime.Composable
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
-import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsAdapter
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsFragment
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel.SettingsItem
 import com.kieronquinn.app.taptap.utils.extensions.getText
@@ -50,16 +49,7 @@ class SetupGestureConfigurationFragment: GenericSettingsFragment() {
         )
     }
 
-    override fun createAdapter(items: List<SettingsItem>): GenericSettingsAdapter {
-        return SetupGestureConfigurationAdapter()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //Fix jittery pull from bottom section of sheet
-        binding.root.updateLayoutParams<ViewGroup.LayoutParams> { height = ViewGroup.LayoutParams.MATCH_PARENT }
-    }
-
-    inner class SetupGestureConfigurationAdapter: GenericSettingsAdapter(requireContext(), binding.settingsGenericRecyclerView, items)
+    @Composable
+    override fun contentPadding() = WindowInsets.navigationBars.asPaddingValues()
 
 }

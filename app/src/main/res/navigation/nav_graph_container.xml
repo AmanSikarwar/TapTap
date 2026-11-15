@@ -9,7 +9,7 @@
         android:id="@+id/settingsMainFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.main.SettingsMainFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_settings_main" >
+ >
         <action
             android:id="@+id/action_settingsMainFragment_to_settingsFeedbackFragment"
             app:destination="@id/settingsFeedbackFragment" />
@@ -30,7 +30,7 @@
         android:id="@+id/settingsOptionsFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.options.SettingsOptionsFragment"
         android:label="@string/setting_bottom_nav_settings"
-        tools:layout="@layout/fragment_settings_options" >
+ >
         <action
             android:id="@+id/action_settingsOptionsFragment_to_settingsLowPowerModeFragment"
             app:destination="@id/settingsLowPowerModeFragment" />
@@ -58,12 +58,12 @@
         android:id="@+id/settingsFeedbackFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.feedback.SettingsFeedbackFragment"
         android:label="@string/setting_feedback"
-        tools:layout="@layout/fragment_settings_generic" />
+ />
     <fragment
         android:id="@+id/settingsActionsDoubleFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.actions.doubletap.SettingsActionsDoubleFragment"
         android:label="@string/setting_actions_double"
-        tools:layout="@layout/fragment_settings_actions_double" >
+ >
         <action
             android:id="@+id/action_settingsActionsDoubleFragment_to_settingsActionsAddCategorySelectorFragment"
             app:destination="@id/settingsActionsAddCategorySelectorFragment" />
@@ -78,7 +78,7 @@
         android:id="@+id/settingsActionsTripleFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.actions.tripletap.SettingsActionsTripleFragment"
         android:label="@string/setting_actions_triple"
-        tools:layout="@layout/fragment_settings_actions_triple" >
+ >
         <action
             android:id="@+id/action_settingsActionsTripleFragment_to_settingsActionsAddCategorySelectorFragment"
             app:destination="@id/settingsActionsAddCategorySelectorFragment" />
@@ -90,7 +90,7 @@
         android:id="@+id/settingsGatesFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.gates.SettingsGatesFragment"
         android:label="@string/setting_gates"
-        tools:layout="@layout/fragment_settings_gates" >
+ >
         <action
             android:id="@+id/action_settingsGatesFragment_to_settingsGatesHelpBottomSheetFragment"
             app:destination="@id/settingsGatesHelpBottomSheetFragment" />
@@ -99,7 +99,7 @@
         android:id="@+id/settingsLowPowerModeFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.lowpower.SettingsLowPowerModeFragment"
         android:label="@string/setting_low_power_mode"
-        tools:layout="@layout/fragment_settings_low_power_mode" >
+ >
         <action
             android:id="@+id/action_settingsLowPowerModeFragment_to_settingsLowPowerModeShizukuInfoFragment"
             app:destination="@id/settingsLowPowerModeShizukuInfoFragment" />
@@ -108,7 +108,7 @@
         android:id="@+id/settingsAdvancedFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.advanced.SettingsAdvancedFragment"
         android:label="@string/setting_advanced"
-        tools:layout="@layout/fragment_settings_generic" >
+ >
         <action
             android:id="@+id/action_settingsAdvancedFragment_to_settingsAdvancedCustomSensitivityFragment"
             app:destination="@id/settingsAdvancedCustomSensitivityFragment" />
@@ -120,7 +120,7 @@
         android:id="@+id/settingsAdvancedCustomSensitivityFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.advanced.customsensitivity.SettingsAdvancedCustomSensitivityFragment"
         android:label=" "
-        tools:layout="@layout/fragment_settings_advanced_custom_sensitivity" />
+ />
     <include app:graph="@navigation/nav_graph_add_action" />
     <action
         android:id="@+id/action_global_nav_graph_add_action"
@@ -145,7 +145,7 @@
         android:id="@+id/settingsLowPowerModeShizukuInfoFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.lowpower.shizukuinfo.SettingsLowPowerModeShizukuInfoFragment"
         android:label="@string/settings_shared_shizuku_permission_flow_toolbar_title"
-        tools:layout="@layout/fragment_settings_low_power_mode_shizuku_info" />
+ />
     <include app:graph="@navigation/nav_graph_shared_picker_package" />
     <action
         android:id="@+id/action_global_nav_graph_shared_picker_package"
@@ -158,7 +158,7 @@
         android:id="@+id/settingsActionsWhenGatesFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.actions.whengates.SettingsActionsWhenGatesFragment"
         android:label="@string/settings_when_gates_title"
-        tools:layout="@layout/fragment_settings_actions_when_gates" >
+ >
         <argument
             android:name="action"
             app:argType="com.kieronquinn.app.taptap.models.action.TapTapUIAction" />
@@ -170,22 +170,22 @@
         android:id="@+id/settingsModelPickerFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.modelpicker.SettingsModelPickerFragment"
         android:label="@string/setting_gesture_model"
-        tools:layout="@layout/fragment_settings_model_picker" />
+ />
     <dialog
         android:id="@+id/settingsGatesHelpBottomSheetFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.gates.help.SettingsGatesHelpBottomSheetFragment"
         android:label=" "
-        tools:layout="@layout/fragment_settings_gates_help" />
+ />
     <dialog
         android:id="@+id/settingsActionsHelpBottomSheetFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.actions.help.SettingsActionsHelpBottomSheetFragment"
         android:label=" "
-        tools:layout="@layout/fragment_settings_actions_help" />
+ />
     <fragment
         android:id="@+id/settingsBatteryFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.battery.SettingsBatteryFragment"
         android:label="@string/battery_and_optimisation"
-        tools:layout="@layout/fragment_settings_generic"/>
+/>
     <include app:graph="@navigation/nav_graph_shared_snapchat" />
     <action
         android:id="@+id/action_global_nav_graph_shared_snapchat"
@@ -194,7 +194,7 @@
         android:id="@+id/settingsMoreFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.more.SettingsMoreFragment"
         android:label="@string/setting_bottom_nav_more"
-        tools:layout="@layout/fragment_settings_generic">
+>
         <action
             android:id="@+id/action_settingsMoreFragment_to_settingsBatteryFragment"
             app:destination="@id/settingsBatteryFragment" />
@@ -217,7 +217,7 @@
         android:id="@+id/settingsBackupRestoreFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.backuprestore.SettingsBackupRestoreFragment"
         android:label="@string/settings_backup_restore"
-        tools:layout="@layout/fragment_settings_backup_restore" >
+ >
         <action
             android:id="@+id/action_settingsBackupRestoreFragment_to_settingsBackupRestoreBackupFragment"
             app:destination="@id/settingsBackupRestoreBackupFragment" />
@@ -229,7 +229,7 @@
         android:id="@+id/settingsBackupRestoreBackupFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.backuprestore.backup.SettingsBackupRestoreBackupFragment"
         android:label="@string/settings_backup_restore_backup"
-        tools:layout="@layout/fragment_settings_backup_restore_backup" >
+ >
         <argument
             android:name="backupUri"
             app:argType="android.net.Uri" />
@@ -238,7 +238,7 @@
         android:id="@+id/settingsBackupRestoreRestoreFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.backuprestore.restore.SettingsBackupRestoreRestoreFragment"
         android:label="@string/settings_backup_restore_restore"
-        tools:layout="@layout/fragment_settings_backup_restore_restore">
+>
         <argument
             android:name="uri"
             app:argType="android.net.Uri" />
@@ -247,7 +247,7 @@
         android:id="@+id/settingsSharedInternetPermissionDialogFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.shared.internet.SettingsSharedInternetPermissionDialogFragment"
         android:label=" "
-        tools:layout="@layout/fragment_dialog_internet_permission"/>
+/>
     <action
         android:id="@+id/action_global_settingsSharedInternetPermissionDialogFragment"
         app:destination="@id/settingsSharedInternetPermissionDialogFragment" />
@@ -262,17 +262,17 @@
     <activity
         android:id="@+id/ossLicensesMenuActivity"
         android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-        tools:layout="@layout/libraries_social_licenses_license_menu_activity" />
+ />
     <fragment
         android:id="@+id/settingsContributionsFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.contributions.SettingsContributionsFragment"
         android:label="@string/about_contributors"
-        tools:layout="@layout/fragment_settings_generic" />
+ />
     <fragment
         android:id="@+id/settingsUpdateFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.update.SettingsUpdateFragment"
         android:label="@string/snackbar_update"
-        tools:layout="@layout/fragment_settings_update">
+>
         <argument
             android:name="release"
             app:argType="com.kieronquinn.app.taptap.models.update.Release" />
@@ -284,12 +284,12 @@
         android:id="@+id/settingsWallpaperColorPickerBottomSheetFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.advanced.wallpapercolorpicker.SettingsWallpaperColorPickerBottomSheetFragment"
         android:label=" "
-        tools:layout="@layout/fragment_settings_wallpaper_color_picker" />
+ />
     <fragment
         android:id="@+id/settingsNativeModeFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.nativemode.SettingsNativeModeFragment"
         android:label="@string/settings_native_mode"
-        tools:layout="@layout/fragment_settings_native_mode" >
+ >
         <action
             android:id="@+id/action_settingsNativeModeFragment_to_settingsLowPowerModeShizukuInfoFragment"
             app:destination="@id/settingsLowPowerModeShizukuInfoFragment" />

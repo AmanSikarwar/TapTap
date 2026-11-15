@@ -8,30 +8,23 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kieronquinn.app.taptap.ui.compose.ServiceSwitchCard
+import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsFragment
 import com.kieronquinn.app.taptap.R
-import com.kieronquinn.app.taptap.databinding.FragmentSettingsMainBinding
-import com.kieronquinn.app.taptap.ui.base.BoundFragment
 import com.kieronquinn.app.taptap.ui.base.CanShowSnackbar
 import com.kieronquinn.app.taptap.ui.base.ProvidesOverflow
 import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
-import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsAdapter
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel.SettingsItem
-import com.kieronquinn.app.taptap.utils.extensions.applyBottomInsets
-import com.kieronquinn.app.taptap.utils.extensions.onClicked
-import com.kieronquinn.app.taptap.utils.extensions.whenResumed
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsMainFragment :
-    BoundFragment<FragmentSettingsMainBinding>(FragmentSettingsMainBinding::inflate), CanShowSnackbar, ProvidesOverflow {
+class SettingsMainFragment : GenericSettingsFragment(), CanShowSnackbar, ProvidesOverflow {
 
-    private val viewModel by viewModel<SettingsMainViewModel>()
+    override val viewModel by viewModel<SettingsMainViewModel>()
     private val sharedViewModel by activityViewModel<ContainerSharedViewModel>()
-    private val adapter by lazy {
-        SettingsMainAdapter()
-    }
 
     private val notificationPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -39,7 +32,7 @@ class SettingsMainFragment :
         //We don't actually care about the result here
     }
 
-    private val items by lazy {
+    override val items by lazy {
         listOf(
             SettingsItem.Info(
                 icon = R.drawable.ic_settings_battery_optimisation,
@@ -74,47 +67,20 @@ class SettingsMainFragment :
         )
     }
 
+    override val header: @Composable () -> Unit = {
+        val running by sharedViewModel.isServiceRunning.collectAsStateWithLifecycle()
+        ServiceSwitchCard(running, { sharedViewModel.toggleServiceEnabledState(requireContext()) })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupSwitch()
-        setupRecyclerView()
         viewModel.checkInternetPermission()
         requestNotificationPermissionIfPossible()
     }
 
-    private fun setupSwitch() {
-        binding.settingsMainEnableTapTap.isChecked = sharedViewModel.isServiceRunning.value
-        whenResumed {
-            with(binding.settingsMainEnableTapTap) {
-                launch {
-                    sharedViewModel.isServiceRunning.collect {
-                        isChecked = it
-                    }
-                }
-                launch {
-                    onClicked().collect {
-                        sharedViewModel.toggleServiceEnabledState(it.context)
-                    }
-                }
-            }
-        }
-    }
-
-
-    private fun setupRecyclerView() = with(binding.settingsMainRecyclerView) {
-        layoutManager = LinearLayoutManager(context)
-        adapter = this@SettingsMainFragment.adapter
-        applyBottomInsets(binding.root)
-    }
-
-    override fun onDestroyView() {
-        binding.settingsMainRecyclerView.adapter = null
-        super.onDestroyView()
-    }
-
     override fun onResume() {
         super.onResume()
-        adapter.refreshVisibleItems()
+        refreshVisibleItems()
     }
 
     override fun inflateMenu(menuInflater: MenuInflater, menu: Menu) {
@@ -136,5 +102,4 @@ class SettingsMainFragment :
         notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
-    inner class SettingsMainAdapter: GenericSettingsAdapter(requireContext(), binding.settingsMainRecyclerView, items)
 }

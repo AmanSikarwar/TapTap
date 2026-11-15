@@ -9,7 +9,7 @@
         android:id="@+id/settingsSharedSnapchatFragment"
         android:name="com.kieronquinn.app.taptap.ui.screens.settings.shared.snapchat.SettingsSharedSnapchatFragment"
         android:label="@string/action_snapchat"
-        tools:layout="@layout/fragment_settings_shared_snapchat">
+>
 
         <argument
             android:name="argument"
