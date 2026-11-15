@@ -123,7 +123,7 @@ class TapTapGestureSensorImpl(
 
     override val sensorEventListener = GestureSensorEventListener()
     override val tap by lazy {
-        val classifier = createClassifier(context.assets, settings)
+        val classifier = createClassifier(context.assets)
         val customSensitivity = settings.columbusCustomSensitivity.getSync()
         val sensitivity = if(customSensitivity == -1f){
             getSensitivityValueForLevel(settings.columbusSensitivityLevel.getSync())
@@ -140,11 +140,8 @@ class TapTapGestureSensorImpl(
         }
     }
 
-    private fun createClassifier(
-        assetManager: AssetManager,
-        settings: TapTapSettings
-    ): TapTapTfClassifier {
-        return TapTapTfClassifier(assetManager, tapModel, scope, settings)
+    private fun createClassifier(assetManager: AssetManager): TapTapTfClassifier {
+        return TapTapTfClassifier(assetManager, tapModel, scope)
     }
 
 }

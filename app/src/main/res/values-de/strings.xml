@@ -241,8 +241,6 @@
     <string name="setting_advanced_restart_service_desc">Versuche den Tap, Tap Service jede Stunde automatisch neu zu starten.</string>
     <string name="setting_advanced_legacy_wake">Alte Wake-Device Methode</string>
     <string name="setting_advanced_legacy_wake_desc">Verwendet die alte Methode, das Gerät mit der \"Gerät aufwecken\" Option anzuschalten. Dies funktioniert möglicherweise nicht bei allen Geräten, kann aber in einigen wenigen Fällen zuverlässiger sein.</string>
-    <string name="setting_advanced_tensor_low_power">Tensor Energiesparmodus</string>
-    <string name="setting_advanced_tensor_low_power_desc">Führt (falls verfügbar) das Tensor-Modell auf der stromsparenden CPU aus. Deaktiviere diese Option, wenn es zu Leistungsproblemen kommt oder die Gesten gar nicht mehr funktionieren.</string>
     <string name="settings_advanced_monet_color_picker">Hintergrundfarbe</string>
     <string name="settings_advanced_monet_color_picker_desc">Wähle eine Farbe aus deinem Hintergrund, um sie in der Tap, Tap Benutzeroberfläche zu nutzen.</string>
     <string name="setting_advanced_custom_sensitivity">Individuelle Empfindlichkeit</string>

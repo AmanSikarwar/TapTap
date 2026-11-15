@@ -18,13 +18,6 @@ class SettingsAdvancedFragment: GenericSettingsFragment(), BackAvailable {
                 contentRes = R.string.setting_advanced_warning_desc
             ),
             SettingsItem.Switch(
-                icon = R.drawable.ic_setting_low_power_mode,
-                titleRes = R.string.setting_advanced_tensor_low_power,
-                contentRes = R.string.setting_advanced_tensor_low_power_desc,
-                setting = viewModel.tensorLowPowerMode,
-                isVisible = { !viewModel.isLowPowerModeEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1 }
-            ),
-            SettingsItem.Switch(
                 icon = R.drawable.ic_settings_advanced_auto_restart,
                 titleRes = R.string.setting_advanced_restart_service,
                 contentRes = R.string.setting_advanced_restart_service_desc,

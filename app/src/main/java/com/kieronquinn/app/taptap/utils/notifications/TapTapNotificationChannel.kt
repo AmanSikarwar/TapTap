@@ -16,7 +16,7 @@ sealed class TapTapNotificationChannel(
 ) {
 
     companion object {
-        const val NOTIFICATION_ICON = R.drawable.ic_taptap_logo
+        val NOTIFICATION_ICON = R.drawable.ic_taptap_logo
     }
 
     object Background : TapTapNotificationChannel(

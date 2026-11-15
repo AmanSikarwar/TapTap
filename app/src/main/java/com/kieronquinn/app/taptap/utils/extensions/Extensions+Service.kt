@@ -3,6 +3,7 @@ package com.kieronquinn.app.taptap.utils.extensions
 import android.app.Notification
 import android.app.Service
 import android.content.pm.ServiceInfo
+import android.util.Log
 import android.os.Build
 
 fun Service.startForegroundCompat(notificationId: Int, notification: Notification): Boolean {
@@ -11,7 +12,7 @@ fun Service.startForegroundCompat(notificationId: Int, notification: Notificatio
             startForeground(
                 notificationId,
                 notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
             )
         }else{
             startForeground(notificationId, notification)
@@ -19,6 +20,7 @@ fun Service.startForegroundCompat(notificationId: Int, notification: Notificatio
         true
     }catch (e: Exception) {
         //Caches ForegroundServiceStartNotAllowedException on S+ when unable to startForeground
+        Log.e("ForegroundService", "Unable to start foreground", e)
         false
     }
 }

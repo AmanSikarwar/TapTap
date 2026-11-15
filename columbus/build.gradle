@@ -1,15 +1,13 @@
 plugins {
     id 'com.android.library'
-    id 'kotlin-android'
     id 'com.google.protobuf'
 }
 
 android {
-    compileSdk 35
+    compileSdk 37
 
     defaultConfig {
         minSdk 24
-        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -27,11 +25,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     buildFeatures {
         aidl true
@@ -42,12 +37,7 @@ android {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.19.2"
-    }
-    plugins {
-        javalite {
-            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.1'
-        }
+        artifact = "com.google.protobuf:protoc:4.36.2"
     }
     generateProtoTasks {
         all().each { task ->
@@ -62,13 +52,13 @@ protobuf {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.core:core-ktx:1.19.1'
 
-    //Tensorflow, used in non-CHRE usage
-    implementation "org.tensorflow:tensorflow-lite-support:$tensorflow_version"
+    //LiteRT (TensorFlow Lite), used in non-CHRE usage
+    implementation "com.google.ai.edge.litert:litert:$litert_version"
 
     //Protobuf
-    api "com.google.protobuf:protobuf-javalite:3.25.2"
+    api "com.google.protobuf:protobuf-javalite:4.36.2"
 
     compileOnly project(path: ':systemstubs')
     api project(path: ':shared')

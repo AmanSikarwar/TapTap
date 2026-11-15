@@ -15,11 +15,11 @@ import com.kieronquinn.app.taptap.ui.views.LifecycleAwareRecyclerView.ViewHolder
  *  A simple [RecyclerView] whose [ViewHolder]s have a very basic [Lifecycle].
  *
  *  The lifecycle is as follows:
- *  - When the ViewHolder is created -> [Lifecycle.Event.ON_START] and [Lifecycle.Event.ON_CREATE]
+ *  - When the ViewHolder is created -> [Lifecycle.Event.ON_CREATE] and [Lifecycle.Event.ON_START]
  *  - When the ViewHolder is bound -> [Lifecycle.Event.ON_RESUME]
  *  - When the ViewHolder is recycled -> [Lifecycle.Event.ON_PAUSE]
- *  - When the RecyclerView is detached -> [Lifecycle.Event.ON_PAUSE], [Lifecycle.Event.ON_DESTROY]
- *  and [Lifecycle.Event.ON_STOP]
+ *  - When the RecyclerView is detached -> [Lifecycle.Event.ON_PAUSE], [Lifecycle.Event.ON_STOP]
+ *  and [Lifecycle.Event.ON_DESTROY]
  *
  *  **Note: Only supports [LinearLayoutManager], and assumes that the [Adapter] will be un-set when
  *  the fragment is destroyed**
@@ -38,14 +38,15 @@ class LifecycleAwareRecyclerView : RecyclerView {
         private val lifecycleRegistry by lazy { LifecycleRegistry(this@ViewHolder) }
 
         init {
-            handleLifecycleEvent(Lifecycle.Event.ON_START)
             handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+            handleLifecycleEvent(Lifecycle.Event.ON_START)
         }
 
         override val lifecycle
             get() = lifecycleRegistry
 
         internal fun handleLifecycleEvent(event: Lifecycle.Event) {
+            if (lifecycleRegistry.currentState == Lifecycle.State.DESTROYED) return
             lifecycleRegistry.handleLifecycleEvent(event)
         }
 
@@ -70,8 +71,8 @@ class LifecycleAwareRecyclerView : RecyclerView {
             super.onDetachedFromRecyclerView(recyclerView)
             getCreatedViewHolders().forEach {
                 it.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-                it.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                 it.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
+                it.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             }
         }
 

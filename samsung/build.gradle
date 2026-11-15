@@ -1,15 +1,13 @@
 plugins {
     id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
 }
 
 android {
     namespace 'com.samsung.android.backtap'
-    compileSdk 35
+    compileSdk 37
 
     defaultConfig {
         minSdk 24
-        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -22,16 +20,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation "org.tensorflow:tensorflow-lite-support:$tensorflow_version"
+    implementation 'androidx.core:core-ktx:1.19.1'
     api project(path: ':shared')
 }
