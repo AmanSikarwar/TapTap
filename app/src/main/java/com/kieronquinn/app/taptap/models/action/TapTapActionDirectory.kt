@@ -286,7 +286,7 @@ enum class TapTapActionDirectory(
         R.string.do_not_disturb_desc,
         R.drawable.ic_action_do_not_disturb,
         null,
-        actionRequirement = arrayOf(ActionRequirement.AccessNotificationPolicyPermission)
+        actionRequirement = audioActionRequirements(ActionRequirement.AccessNotificationPolicyPermission)
     ),
     VOLUME_PANEL(
         VolumeAction::class.java,
@@ -294,7 +294,8 @@ enum class TapTapActionDirectory(
         R.string.action_volume_panel,
         R.string.action_volume_panel_desc,
         R.drawable.ic_action_volume_panel,
-        null
+        null,
+        actionRequirement = audioActionRequirements()
     ),
     VOLUME_UP(
         VolumeAction::class.java,
@@ -302,7 +303,8 @@ enum class TapTapActionDirectory(
         R.string.action_volume_up,
         R.string.action_volume_up_desc,
         R.drawable.ic_action_volume_up,
-        null
+        null,
+        actionRequirement = audioActionRequirements()
     ),
     VOLUME_DOWN(
         VolumeAction::class.java,
@@ -310,7 +312,8 @@ enum class TapTapActionDirectory(
         R.string.action_volume_down,
         R.string.action_volume_down_desc,
         R.drawable.ic_action_volume_down,
-        null
+        null,
+        actionRequirement = audioActionRequirements()
     ),
     VOLUME_TOGGLE_MUTE(
         VolumeAction::class.java,
@@ -318,7 +321,8 @@ enum class TapTapActionDirectory(
         R.string.action_volume_toggle_mute,
         R.string.action_volume_toggle_mute_desc,
         R.drawable.ic_action_volume_toggle_mute,
-        null
+        null,
+        actionRequirement = audioActionRequirements()
     ),
     ALARM_TIMER(
         AlarmTimerAction::class.java,
@@ -565,3 +569,10 @@ sealed class ActionRequirement {
 
 }
 
+
+private fun audioActionRequirements(vararg requirements: ActionRequirement): Array<ActionRequirement>? {
+    val accessibility = ActionRequirement.Accessibility.takeIf {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN
+    }
+    return (requirements.toList() + listOfNotNull(accessibility)).takeIf { it.isNotEmpty() }?.toTypedArray()
+}
