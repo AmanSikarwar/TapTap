@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.navigation
 
+import androidx.compose.ui.platform.LocalResources
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -86,7 +87,7 @@ fun InternetPermissionEntry(navigation: BaseNavigation) {
 private fun HelpSheet(title: Int, content: Int, navigation: BaseNavigation) {
     SheetMessage(
         title = stringResource(title),
-        text = LocalContext.current.getText(content),
+        text = LocalResources.current.getText(content),
         positive = stringResource(android.R.string.ok),
         onPositive = back(navigation)
     )

@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.backuprestore.restore
 
+import androidx.compose.ui.platform.LocalResources
 import android.Manifest
 import android.net.Uri
 import androidx.activity.compose.BackHandler
@@ -84,9 +85,9 @@ fun SettingsBackupRestoreRestoreScreen(viewModel: SettingsBackupRestoreRestoreVi
         ) {
             items(s.items) { item ->
                 when (item) {
-                    is Item.Infobox -> MessageCard(R.drawable.ic_about, LocalContext.current.getText(item.content), Modifier.padding(16.dp))
+                    is Item.Infobox -> MessageCard(R.drawable.ic_about, LocalResources.current.getText(item.content), Modifier.padding(16.dp))
                     is Item.Header -> Text(
-                        LocalContext.current.getText(item.title).toAnnotatedString(),
+                        LocalResources.current.getText(item.title).toAnnotatedString(),
                         Modifier.padding(start = 32.dp, end = 32.dp, top = 16.dp, bottom = 4.dp),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.primary
@@ -100,7 +101,7 @@ fun SettingsBackupRestoreRestoreScreen(viewModel: SettingsBackupRestoreRestoreVi
 
 @Composable
 private fun RequirementCard(item: Item.Requirement, onSetup: () -> Unit, onSkip: () -> Unit) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     Card(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).alpha(if (item.isSupported) 1f else 0.5f),
         shape = MaterialTheme.shapes.large,
@@ -110,9 +111,9 @@ private fun RequirementCard(item: Item.Requirement, onSetup: () -> Unit, onSkip:
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(painterResource(item.icon), null)
                 Column(Modifier.padding(start = 16.dp)) {
-                    Text(context.getText(item.title).toString(), style = MaterialTheme.typography.titleMedium)
+                    Text(resources.getText(item.title).toString(), style = MaterialTheme.typography.titleMedium)
                     Text(
-                        context.getText(
+                        resources.getText(
                             when {
                                 item.isSupported -> item.desc
                                 item.isGate -> R.string.gate_selector_unavailable

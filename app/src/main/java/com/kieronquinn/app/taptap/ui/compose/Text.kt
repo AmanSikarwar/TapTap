@@ -3,7 +3,7 @@ package com.kieronquinn.app.taptap.ui.compose
 import android.text.Html
 import android.text.Spanned
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -13,8 +13,8 @@ import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun resolveText(res: Int?, text: CharSequence?): CharSequence? {
-    val context = LocalContext.current
-    return text ?: res?.let { context.getText(it) }
+    val resources = LocalResources.current
+    return text ?: res?.let { resources.getText(it) }
 }
 
 @Composable

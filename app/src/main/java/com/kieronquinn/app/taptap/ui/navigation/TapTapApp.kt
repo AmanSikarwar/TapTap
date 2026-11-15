@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.navigation
 
+import androidx.activity.compose.LocalActivity
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -86,7 +87,7 @@ fun TapTapApp() {
             }
             entry<RootKey.SetupUpgrade> { SetupUpgradeScreen(koinViewModel()) }
             entry<RootKey.NoGyroscope> {
-                val activity = LocalContext.current as Activity
+                val activity = LocalActivity.current!!
                 NoGyroscopeScreen(onClose = activity::finish)
             }
             entry<RootKey.DisableColumbus> { DisableColumbusScreen(koinViewModel()) }

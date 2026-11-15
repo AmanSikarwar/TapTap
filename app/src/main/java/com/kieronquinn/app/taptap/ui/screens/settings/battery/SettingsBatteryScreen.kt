@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.battery
 
+import com.kieronquinn.app.taptap.utils.extensions.getHtmlText
+import androidx.compose.ui.platform.LocalResources
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,6 +17,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SettingsBatteryScreen(viewModel: SettingsBatteryViewModel = koinViewModel()) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val showHeader by viewModel.showHeader.collectAsStateWithLifecycle()
     val items = remember(viewModel) {
         listOf(
@@ -33,9 +36,9 @@ fun SettingsBatteryScreen(viewModel: SettingsBatteryViewModel = koinViewModel())
                 titleRes = R.string.settings_battery_disable_optimisation,
                 content = {
                     if (viewModel.batteryOptimisationDisabled.value) {
-                        context.getString(R.string.settings_battery_disable_optimisation_desc_disabled)
+                        resources.getString(R.string.settings_battery_disable_optimisation_desc_disabled)
                     } else {
-                        context.getString(R.string.settings_battery_disable_optimisation_desc_enabled)
+                        resources.getString(R.string.settings_battery_disable_optimisation_desc_enabled)
                     }
                 },
                 isEnabled = { !viewModel.batteryOptimisationDisabled.value },

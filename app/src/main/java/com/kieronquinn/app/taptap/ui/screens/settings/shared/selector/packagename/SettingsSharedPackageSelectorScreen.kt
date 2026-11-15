@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.packagename
 
+import androidx.compose.runtime.remember
 import com.kieronquinn.app.taptap.components.navigation.NavigationResults
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -25,7 +26,7 @@ fun SettingsSharedPackageSelectorScreen(viewModel: SettingsSharedPackageSelector
         loading = s is State.Loading,
         empty = (s as? State.Loaded)?.items?.isEmpty() == true,
         emptyText = stringResource(R.string.settings_shared_package_selector_empty),
-        header = { SearchField(viewModel.searchText.value, viewModel::setSearchText) }
+        header = { SearchField(remember(viewModel) { viewModel.searchText.value }, viewModel::setSearchText) }
     ) {
         if (s is State.Loaded) itemsIndexed(s.items, key = { _, it -> it.packageName }) { index, app ->
             SelectorItem(

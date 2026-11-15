@@ -11,6 +11,7 @@ import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
+import android.content.res.Resources
 import android.content.Context.RECEIVER_EXPORTED
 import android.content.ContextHidden
 import android.content.Intent
@@ -223,3 +224,6 @@ fun Context.registerReceiverCompat(
         registerReceiver(receiver, intentFilter)
     }
 }
+
+fun Resources.getHtmlText(@StringRes id: Int, vararg args: Any?): CharSequence =
+    HtmlCompat.fromHtml(String.format(getString(id), *args), HtmlCompat.FROM_HTML_MODE_COMPACT)

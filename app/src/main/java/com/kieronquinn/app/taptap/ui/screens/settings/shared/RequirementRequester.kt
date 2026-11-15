@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared
 
+import androidx.activity.compose.LocalActivity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -120,7 +121,7 @@ class RequirementRequester(
 
 @Composable
 fun rememberRequirementRequester(): RequirementRequester {
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current!!
     val permissionResults = remember { MutableSharedFlow<Map<String, Boolean>>(extraBufferCapacity = 1) }
     val resumes = remember { MutableSharedFlow<Unit>(extraBufferCapacity = 1) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {

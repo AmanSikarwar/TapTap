@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.modelpicker
 
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -80,7 +81,7 @@ fun SettingsModelPickerScreen(viewModel: SettingsModelPickerViewModel, onRestart
                     when (item) {
                         is Item.Header -> MessageCard(
                             R.drawable.ic_about,
-                            LocalContext.current.getText(item.contentRes),
+                            LocalResources.current.getText(item.contentRes),
                             Modifier.padding(16.dp)
                         )
                         is Item.Model -> {

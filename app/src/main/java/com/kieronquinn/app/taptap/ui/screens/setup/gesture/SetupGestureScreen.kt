@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.gesture
 
+import androidx.compose.ui.platform.LocalResources
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
@@ -210,7 +211,7 @@ private fun GestureDemo(viewModel: SetupGestureViewModel, modifier: Modifier) {
         }
         MessageCard(
             icon = infoCard.icon,
-            text = LocalContext.current.getText(infoCard.contentRes),
+            text = LocalResources.current.getText(infoCard.contentRes),
             containerColor = if (infoCard == InfoCard.SUCCESS) MaterialTheme.colorScheme.primaryContainer
                 else MaterialTheme.colorScheme.surfaceContainerHigh,
             onClick = if (infoCard == InfoCard.SUCCESS) viewModel::onNextClicked else null

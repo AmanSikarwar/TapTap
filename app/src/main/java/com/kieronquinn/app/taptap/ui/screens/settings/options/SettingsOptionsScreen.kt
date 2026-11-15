@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.options
 
+import com.kieronquinn.app.taptap.utils.extensions.getHtmlText
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -17,6 +19,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SettingsOptionsScreen(viewModel: SettingsOptionsViewModel = koinViewModel()) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val sharedViewModel = koinActivityViewModel<ContainerSharedViewModel>()
     val items = remember(viewModel) {
         listOf(
@@ -24,9 +27,9 @@ fun SettingsOptionsScreen(viewModel: SettingsOptionsViewModel = koinViewModel())
                 icon = R.drawable.ic_setting_low_power_mode,
                 titleRes = R.string.setting_low_power_mode,
                 content = { if(viewModel.isLowPowerModeAvailable){
-                    context.getString(R.string.setting_low_power_mode_desc)
+                    resources.getString(R.string.setting_low_power_mode_desc)
                 }else{
-                    context.getString(R.string.setting_low_power_mode_desc_unavailable)
+                    resources.getString(R.string.setting_low_power_mode_desc_unavailable)
                 }},
                 isEnabled = viewModel::isLowPowerModeAvailable,
                 onClick = viewModel::onLowPowerModeClicked
@@ -35,9 +38,9 @@ fun SettingsOptionsScreen(viewModel: SettingsOptionsViewModel = koinViewModel())
                 icon = R.drawable.ic_settings_native_mode,
                 titleRes = R.string.settings_native_mode,
                 content = { if(viewModel.isNativeModeAvailable){
-                    context.getString(R.string.settings_native_mode_desc)
+                    resources.getString(R.string.settings_native_mode_desc)
                 }else{
-                    context.getString(R.string.settings_native_mode_desc_unavailable)
+                    resources.getString(R.string.settings_native_mode_desc_unavailable)
                 }},
                 isVisible = viewModel::isLowPowerModeSupported,
                 isEnabled = viewModel::isNativeModeAvailable,
@@ -49,13 +52,13 @@ fun SettingsOptionsScreen(viewModel: SettingsOptionsViewModel = koinViewModel())
                 content = {
                     when {
                         viewModel.isLowPowerModeEnabled -> {
-                            context.getString(R.string.setting_gesture_model_desc_not_available)
+                            resources.getString(R.string.setting_gesture_model_desc_not_available)
                         }
                         viewModel.isNativeModeEnabled -> {
-                            context.getString(R.string.setting_gesture_model_desc_not_available_native)
+                            resources.getString(R.string.setting_gesture_model_desc_not_available_native)
                         }
                         else -> {
-                            context.getString(R.string.setting_gesture_model_desc)
+                            resources.getString(R.string.setting_gesture_model_desc)
                         }
                     }
                 },
@@ -66,16 +69,16 @@ fun SettingsOptionsScreen(viewModel: SettingsOptionsViewModel = koinViewModel())
                 icon = R.drawable.ic_gesture_sensitivity,
                 titleRes = R.string.setting_gesture_sensitivity,
                 content = { if(viewModel.isCustomSensitivitySet) {
-                    context.getString(R.string.setting_gesture_sensitivity_desc_disabled)
+                    resources.getString(R.string.setting_gesture_sensitivity_desc_disabled)
                 }else{
-                    context.getString(R.string.setting_gesture_sensitivity_desc)
+                    resources.getString(R.string.setting_gesture_sensitivity_desc)
                  }},
                 setting = viewModel.sensitivitySetting as TapTapSettings.TapTapSetting<Number>,
                 stepSize = 1.0f,
                 isEnabled = { !viewModel.isCustomSensitivitySet },
                 isVisible = { !viewModel.isLowPowerModeEnabled && !viewModel.isNativeModeEnabled },
                 labelFormatter = {
-                    context.getString(when {
+                    resources.getString(when {
                         it < 2 -> R.string.slider_sensitivity_very_low
                         it < 4 -> R.string.slider_sensitivity_low
                         it < 6 -> R.string.slider_sensitivity_medium
@@ -87,7 +90,7 @@ fun SettingsOptionsScreen(viewModel: SettingsOptionsViewModel = koinViewModel())
             SettingsItem.Switch(
                 icon = R.drawable.ic_gesture_sensitivity_lower,
                 titleRes = R.string.setting_gesture_sensitivity_chre,
-                content = { context.getString(R.string.setting_gesture_sensitivity_chre_desc) },
+                content = { resources.getString(R.string.setting_gesture_sensitivity_chre_desc) },
                 setting = viewModel.sensitivitySettingCHRE,
                 isVisible = { viewModel.isLowPowerModeEnabled && !viewModel.isNativeModeEnabled }
             ),

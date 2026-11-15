@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.snapchat
 
+import androidx.compose.ui.platform.LocalResources
 import com.kieronquinn.app.taptap.components.navigation.NavigationResults
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -71,7 +72,7 @@ fun SettingsSharedSnapchatScreen(viewModel: SettingsSharedSnapchatViewModel, onR
     } else {
         MessageCard(
             R.drawable.ic_about,
-            LocalContext.current.getText(card.second),
+            LocalResources.current.getText(card.second),
             Modifier.fillMaxSize().wrapContentHeight().padding(16.dp),
             title = stringResource(card.first)
         ) {

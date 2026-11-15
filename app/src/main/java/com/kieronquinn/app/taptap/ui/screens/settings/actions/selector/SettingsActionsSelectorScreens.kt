@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions.selector
 
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalResources
 import android.content.Context
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -36,14 +38,14 @@ fun SettingsActionsAddCategorySelectorScreen(
         empty = (s as? SettingsActionsAddCategorySelectorViewModel.State.CategoryPicker)?.categories?.isEmpty() == true
             || (s as? SettingsActionsAddCategorySelectorViewModel.State.ItemPicker)?.items?.isEmpty() == true,
         emptyText = stringResource(R.string.settings_actions_add_category_selector_empty),
-        header = { SearchField(viewModel.searchText.value.toString(), viewModel::setSearchText) }
+        header = { SearchField(remember(viewModel) { viewModel.searchText.value.toString() }, viewModel::setSearchText) }
     ) {
         when (s) {
             is SettingsActionsAddCategorySelectorViewModel.State.CategoryPicker -> itemsIndexed(s.categories) { index, category ->
                 SelectorItem(
                     icon = category.icon,
                     title = stringResource(category.labelRes),
-                    description = LocalContext.current.getText(category.descRes),
+                    description = LocalResources.current.getText(category.descRes),
                     index = index,
                     count = s.categories.size,
                     onClick = { viewModel.onCategoryClicked(category) }
@@ -69,7 +71,7 @@ fun SettingsActionsActionSelectorScreen(
         loading = s is SettingsActionsActionSelectorViewModel.State.Loading,
         empty = (s as? SettingsActionsActionSelectorViewModel.State.Loaded)?.actions?.isEmpty() == true,
         emptyText = stringResource(R.string.settings_actions_add_category_selector_empty),
-        header = { SearchField(viewModel.searchText.value.toString(), viewModel::setSearchText) }
+        header = { SearchField(remember(viewModel) { viewModel.searchText.value.toString() }, viewModel::setSearchText) }
     ) {
         if (s is SettingsActionsActionSelectorViewModel.State.Loaded) itemsIndexed(s.actions) { index, action ->
             ActionSelectorItem(action, index, s.actions.size, viewModel::getActionSupportedRequirement, onActionClicked, onChipClicked)
@@ -87,6 +89,7 @@ private fun ActionSelectorItem(
     onChipClicked: (ActionRequirement.UserDisplayedActionRequirement) -> Unit
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val unsupported = getSupportedRequirement(context, action)
     val requirement = if (unsupported == null) {
         action.actionRequirement?.firstOrNull { it is ActionRequirement.UserDisplayedActionRequirement } as? ActionRequirement.UserDisplayedActionRequirement
@@ -94,7 +97,7 @@ private fun ActionSelectorItem(
     SelectorItem(
         icon = action.iconRes,
         title = stringResource(action.nameRes),
-        description = if (unsupported == null) context.getText(action.descriptionRes)
+        description = if (unsupported == null) resources.getText(action.descriptionRes)
             else stringResource(R.string.action_selector_unavailable, stringResource(unsupported.description)),
         index = index,
         count = count,

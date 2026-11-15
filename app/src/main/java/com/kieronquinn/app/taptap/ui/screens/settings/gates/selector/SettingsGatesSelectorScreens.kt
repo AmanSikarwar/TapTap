@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.gates.selector
 
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalResources
 import android.content.Context
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -37,14 +39,14 @@ fun SettingsGatesAddCategorySelectorScreen(
         empty = (s as? SettingsGatesAddCategorySelectorViewModel.State.CategoryPicker)?.categories?.isEmpty() == true
             || (s as? SettingsGatesAddCategorySelectorViewModel.State.ItemPicker)?.items?.isEmpty() == true,
         emptyText = stringResource(R.string.settings_gates_add_category_selector_empty),
-        header = { SearchField(viewModel.searchText.value.toString(), viewModel::setSearchText) }
+        header = { SearchField(remember(viewModel) { viewModel.searchText.value.toString() }, viewModel::setSearchText) }
     ) {
         when (s) {
             is SettingsGatesAddCategorySelectorViewModel.State.CategoryPicker -> itemsIndexed(s.categories) { index, category ->
                 SelectorItem(
                     icon = category.icon,
                     title = stringResource(category.labelRes),
-                    description = LocalContext.current.getText(category.descRes),
+                    description = LocalResources.current.getText(category.descRes),
                     index = index,
                     count = s.categories.size,
                     onClick = { viewModel.onCategoryClicked(category, isRequirement) }
@@ -71,7 +73,7 @@ fun SettingsGatesGateSelectorScreen(
         loading = s is SettingsGatesGateSelectorViewModel.State.Loading,
         empty = (s as? SettingsGatesGateSelectorViewModel.State.Loaded)?.gates?.isEmpty() == true,
         emptyText = stringResource(R.string.settings_gates_add_category_selector_empty),
-        header = { SearchField(viewModel.searchText.value.toString(), viewModel::setSearchText) }
+        header = { SearchField(remember(viewModel) { viewModel.searchText.value.toString() }, viewModel::setSearchText) }
     ) {
         if (s is SettingsGatesGateSelectorViewModel.State.Loaded) itemsIndexed(s.gates) { index, gate ->
             GateSelectorItem(gate, index, s.gates.size, isRequirement, viewModel::getGateSupportedRequirement, onGateClicked, onChipClicked)
@@ -90,6 +92,7 @@ private fun GateSelectorItem(
     onChipClicked: (GateRequirement.UserDisplayedGateRequirement) -> Unit
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val unsupported = getSupportedRequirement(context, gate)
     val requirement = if (unsupported == null) {
         gate.gateRequirement?.firstOrNull { it is GateRequirement.UserDisplayedGateRequirement } as? GateRequirement.UserDisplayedGateRequirement
@@ -99,8 +102,8 @@ private fun GateSelectorItem(
         title = stringResource(gate.nameRes),
         description = when {
             unsupported != null -> stringResource(R.string.gate_selector_unavailable, stringResource(unsupported.description))
-            isRequirement -> context.getText(gate.whenDescriptionRes)
-            else -> context.getText(gate.descriptionRes)
+            isRequirement -> resources.getText(gate.whenDescriptionRes)
+            else -> resources.getText(gate.descriptionRes)
         },
         index = index,
         count = count,

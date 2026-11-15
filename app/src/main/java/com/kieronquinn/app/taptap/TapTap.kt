@@ -152,11 +152,8 @@ import com.kieronquinn.app.taptap.utils.dummy.DummyStatusBarStateController
 import com.kieronquinn.app.taptap.utils.dummy.DummyUiEventLogger
 import com.kieronquinn.app.taptap.utils.lazy.LazyWrapper
 import com.kieronquinn.app.taptap.utils.logging.UiEventLogger
-import com.kieronquinn.app.taptap.utils.picasso.AppIconRequestHandler
-import com.kieronquinn.app.taptap.utils.picasso.ComponentNameIconRequestHandler
 import com.kieronquinn.app.taptap.utils.statusbar.StatusBarStateController
 import com.kieronquinn.app.taptap.utils.wakefulness.WakefulnessLifecycle
-import com.squareup.picasso.Picasso
 import com.topjohnwu.superuser.Shell
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
@@ -391,12 +388,6 @@ class TapTap : Application() {
             HiddenApiBypass.addHiddenApiExemptions("L")
         }
         Shell.setDefaultBuilder(Shell.Builder.create().setFlags(Shell.FLAG_MOUNT_MASTER))
-        Picasso.setSingletonInstance(
-            Picasso.Builder(this)
-                .addRequestHandler(AppIconRequestHandler(this))
-                .addRequestHandler(ComponentNameIconRequestHandler(this))
-                .build()
-        )
         startKoin {
             androidContext(this@TapTap)
             modules(singlesModule, repositoriesModule, navigationModule, viewModelModule, appShortcutsModule, nativeModeModule, columbusModule)
