@@ -5,16 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
-import androidx.viewbinding.ViewBinding
 import com.google.gson.Gson
 import com.kieronquinn.app.taptap.BuildConfig
 import com.kieronquinn.app.taptap.R
@@ -29,7 +26,7 @@ import com.kieronquinn.app.taptap.models.shared.SharedArgument
 import com.kieronquinn.app.taptap.repositories.quicksettings.QuickSettingsRepository
 import com.kieronquinn.app.taptap.service.accessibility.TapTapAccessibilityService
 import com.kieronquinn.app.taptap.service.accessibility.TapTapGestureAccessibilityService
-import com.kieronquinn.app.taptap.ui.base.BoundFragment
+import com.kieronquinn.app.taptap.ui.base.ComposeFragment
 import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
 import com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.appshortcuts.SettingsSharedAppShortcutsSelectorFragment
 import com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.packagename.SettingsSharedPackageSelectorFragment
@@ -54,8 +51,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-abstract class SettingsActionsAddGenericFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGroup?, Boolean) -> T) :
-    BoundFragment<T>(inflate) {
+abstract class SettingsActionsAddGenericFragment : ComposeFragment() {
 
     companion object {
         const val FRAGMENT_RESULT_KEY_ACTION = "fragment_result_action"

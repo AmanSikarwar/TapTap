@@ -17,7 +17,8 @@ import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel.
 import com.kieronquinn.app.taptap.ui.screens.settings.actions.selector.SettingsActionsAddGenericFragment.Companion.FRAGMENT_RESULT_KEY_ACTION
 import com.kieronquinn.app.taptap.ui.screens.settings.actions.whengates.SettingsActionsWhenGatesFragment
 import com.kieronquinn.app.taptap.utils.extensions.whenResumed
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.mapNotNull
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -30,10 +31,10 @@ abstract class SettingsActionsGenericFragment<A: Action>: ComposeFragment(), Loc
     open val header: (@Composable () -> Unit)? = null
 
     private val sharedViewModel by activityViewModel<ContainerSharedViewModel>()
-    private val results = MutableSharedFlow<ActionsEvent>(extraBufferCapacity = 8)
+    private val results = Channel<ActionsEvent>(Channel.BUFFERED)
 
     private val events by lazy {
-        merge(results, sharedViewModel.fabClicked.mapNotNull {
+        merge(results.receiveAsFlow(), sharedViewModel.fabClicked.mapNotNull {
             when (it) {
                 FabState.FabAction.ADD_ACTION -> ActionsEvent.Add
                 FabState.FabAction.DELETE -> ActionsEvent.Delete
@@ -52,13 +53,13 @@ abstract class SettingsActionsGenericFragment<A: Action>: ComposeFragment(), Loc
         setFragmentResultListener(FRAGMENT_RESULT_KEY_ACTION) { _, bundle ->
             val action = BundleCompat.getParcelable(bundle, FRAGMENT_RESULT_KEY_ACTION, TapTapUIAction::class.java)
                 ?: return@setFragmentResultListener
-            results.tryEmit(ActionsEvent.Added(action))
+            results.trySend(ActionsEvent.Added(action))
         }
         setFragmentResultListener(SettingsActionsWhenGatesFragment.FRAGMENT_RESULT_KEY_WHEN_GATES_SIZE) { _, bundle ->
             @Suppress("UNCHECKED_CAST", "DEPRECATION")
             val pair = bundle.getSerializable(SettingsActionsWhenGatesFragment.FRAGMENT_RESULT_KEY_WHEN_GATES_SIZE) as? Pair<Int, Int>
                 ?: return@setFragmentResultListener
-            results.tryEmit(ActionsEvent.WhenGatesSize(pair.first, pair.second))
+            results.trySend(ActionsEvent.WhenGatesSize(pair.first, pair.second))
         }
         whenResumed {
             viewModel.fabState.collect {
