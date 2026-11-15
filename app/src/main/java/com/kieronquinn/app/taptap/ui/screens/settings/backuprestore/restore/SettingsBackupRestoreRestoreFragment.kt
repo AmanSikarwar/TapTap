@@ -17,13 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kieronquinn.app.taptap.BuildConfig
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.components.accessibility.TapTapAccessibilityRouter
-import com.kieronquinn.app.taptap.databinding.FragmentSettingsBackupRestoreRestoreBinding
 import com.kieronquinn.app.taptap.models.action.ActionRequirement
 import com.kieronquinn.app.taptap.models.gate.GateRequirement
 import com.kieronquinn.app.taptap.service.accessibility.TapTapAccessibilityService
 import com.kieronquinn.app.taptap.service.accessibility.TapTapGestureAccessibilityService
 import com.kieronquinn.app.taptap.ui.base.BackAvailable
-import com.kieronquinn.app.taptap.ui.base.BoundFragment
+import androidx.compose.runtime.Composable
+import com.kieronquinn.app.taptap.ui.base.ComposeFragment
 import com.kieronquinn.app.taptap.ui.base.ProvidesBack
 import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
 import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel.FabState
@@ -52,24 +52,12 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsBackupRestoreRestoreFragment :
-    BoundFragment<FragmentSettingsBackupRestoreRestoreBinding>(
-        FragmentSettingsBackupRestoreRestoreBinding::inflate
-    ), BackAvailable, ProvidesBack {
+class SettingsBackupRestoreRestoreFragment : ComposeFragment(), BackAvailable, ProvidesBack {
 
     private val viewModel by viewModel<SettingsBackupRestoreRestoreViewModel>()
     private val sharedViewModel by activityViewModel<ContainerSharedViewModel>()
     private val args by navArgs<SettingsBackupRestoreRestoreFragmentArgs>()
     private val accessibilityRouter by inject<TapTapAccessibilityRouter>()
-    private val adapter by lazy {
-        SettingsBackupRestoreRestoreAdapter(
-            binding.settingsBackupRestoreRestoreRecyclerview,
-            emptyList(),
-            ::onSetupClicked,
-            viewModel::onRequirementSkipped
-        )
-    }
-
     private val onResume = MutableSharedFlow<Unit>()
     private val permissionResponse = MutableSharedFlow<Map<String, Boolean>>()
     private val permissionResponseContract = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
@@ -80,12 +68,9 @@ class SettingsBackupRestoreRestoreFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupMonet()
-        setupRecyclerView()
         setupState()
         setupFab()
         setupResultListeners()
-        setupClose()
         accessibilityRouter.bringToFrontOnAccessibilityStart(this)
         accessibilityRouter.bringToFrontOnGestureAccessibilityStart(this)
         viewModel.setUri(args.uri)
@@ -98,12 +83,6 @@ class SettingsBackupRestoreRestoreFragment :
         }else false
     }
 
-    private fun setupMonet() {
-        binding.settingsBackupRestoreRestoreProgress.applyMonet()
-        binding.settingsBackupRestoreRestoreIcon.imageTintList = ColorStateList.valueOf(monet.getAccentColor(requireContext()))
-        binding.settingsBackupRestoreRestoreClose.setTextColor(monet.getAccentColor(requireContext()))
-    }
-
     private fun setupState() {
         handleState(viewModel.state.value)
         whenResumed {
@@ -113,12 +92,6 @@ class SettingsBackupRestoreRestoreFragment :
         }
     }
 
-    private fun setupRecyclerView() = with(binding.settingsBackupRestoreRestoreRecyclerview) {
-        layoutManager = LinearLayoutManager(requireContext())
-        adapter = this@SettingsBackupRestoreRestoreFragment.adapter
-        applyBottomInsets(binding.root, resources.getDimension(R.dimen.container_fab_margin).toInt())
-    }
-
     private fun setupFab() = whenResumed {
         sharedViewModel.fabClicked.collect {
             if (it != FabState.FabAction.RESTORE_BACKUP) return@collect
@@ -126,72 +99,12 @@ class SettingsBackupRestoreRestoreFragment :
         }
     }
 
-    private fun setupClose() = whenResumed {
-        binding.settingsBackupRestoreRestoreClose.onClicked().collect {
-            viewModel.onCloseClicked()
-        }
+    private fun handleState(state: State) {
+        setFabState(state is State.ActionRequired && state.isContinueEnabled)
     }
 
-    private fun handleState(state: State) {
-        when (state) {
-            is State.Loading -> {
-                setFabState(false)
-                binding.settingsBackupRestoreRestoreProgress.isVisible = true
-                binding.settingsBackupRestoreRestoreTitle.isVisible = true
-                binding.settingsBackupRestoreRestoreDesc.isVisible = true
-                binding.settingsBackupRestoreRestoreClose.isVisible = false
-                binding.settingsBackupRestoreRestoreIcon.isVisible = false
-                binding.settingsBackupRestoreRestoreRecyclerview.isVisible = false
-                binding.settingsBackupRestoreRestoreTitle.setText(R.string.settings_backuprestore_restore_title)
-                binding.settingsBackupRestoreRestoreDesc.setText(R.string.settings_backuprestore_restore_desc)
-            }
-            is State.ActionRequired -> {
-                setFabState(state.isContinueEnabled)
-                binding.settingsBackupRestoreRestoreProgress.isVisible = false
-                binding.settingsBackupRestoreRestoreTitle.isVisible = false
-                binding.settingsBackupRestoreRestoreDesc.isVisible = false
-                binding.settingsBackupRestoreRestoreClose.isVisible = false
-                binding.settingsBackupRestoreRestoreIcon.isVisible = false
-                binding.settingsBackupRestoreRestoreRecyclerview.isVisible = true
-                adapter.items = state.items
-                adapter.notifyDataSetChanged()
-            }
-            is State.Restoring -> {
-                setFabState(false)
-                binding.settingsBackupRestoreRestoreProgress.isVisible = true
-                binding.settingsBackupRestoreRestoreTitle.isVisible = true
-                binding.settingsBackupRestoreRestoreDesc.isVisible = true
-                binding.settingsBackupRestoreRestoreClose.isVisible = false
-                binding.settingsBackupRestoreRestoreIcon.isVisible = false
-                binding.settingsBackupRestoreRestoreRecyclerview.isVisible = false
-                binding.settingsBackupRestoreRestoreTitle.setText(R.string.settings_backuprestore_restore_title)
-                binding.settingsBackupRestoreRestoreDesc.setText(R.string.settings_backuprestore_restore_desc)
-            }
-            is State.Finished -> {
-                setFabState(false)
-                binding.settingsBackupRestoreRestoreTitle.isVisible = true
-                binding.settingsBackupRestoreRestoreDesc.isVisible = true
-                binding.settingsBackupRestoreRestoreClose.isVisible = true
-                binding.settingsBackupRestoreRestoreIcon.isVisible = true
-                binding.settingsBackupRestoreRestoreProgress.isVisible = false
-                binding.settingsBackupRestoreRestoreRecyclerview.isVisible = false
-                if (state.success) {
-                    binding.settingsBackupRestoreRestoreIcon.setImageResource(R.drawable.ic_check_circle)
-                    binding.settingsBackupRestoreRestoreTitle.setText(R.string.settings_backuprestore_restore_done_title)
-                    binding.settingsBackupRestoreRestoreDesc.text =
-                        binding.root.context.getString(
-                            R.string.settings_backuprestore_restore_done_desc,
-                            state.filename ?: ""
-                        )
-                } else {
-                    binding.settingsBackupRestoreRestoreIcon.setImageResource(R.drawable.ic_error_circle)
-                    binding.settingsBackupRestoreRestoreTitle.setText(R.string.settings_backuprestore_restore_error_title)
-                    binding.settingsBackupRestoreRestoreDesc.text =
-                        binding.root.context.getString(R.string.settings_backuprestore_restore_error_desc)
-                }
-            }
-        }
-    }
+    @Composable
+    override fun Content() = SettingsBackupRestoreRestoreScreen(viewModel) { onSetupClicked(it) }
 
     private fun setFabState(showFab: Boolean) {
         sharedViewModel.setFabState(if (showFab) FabState.Shown(FabState.FabAction.RESTORE_BACKUP) else FabState.Hidden)
