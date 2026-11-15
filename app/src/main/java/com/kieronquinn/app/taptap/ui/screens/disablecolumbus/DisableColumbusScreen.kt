@@ -29,7 +29,7 @@ fun DisableColumbusScreen(viewModel: DisableColumbusViewModel) {
     }
     MessageScreen(
         title = stringResource(R.string.modal_disable_columbus_title),
-        icon = { DrawableImage(R.mipmap.ic_launcher, Modifier.size(96.dp)) }
+        icon = { DrawableImage(R.mipmap.ic_launcher, 96.dp) }
     ) {
         Text(
             stringResource(R.string.modal_disable_columbus_content).toAnnotatedString(viewModel::onLinkClicked),

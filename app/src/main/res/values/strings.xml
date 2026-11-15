@@ -6,6 +6,7 @@
     <!-- Generic -->
     <string name="search">Search</string>
     <string name="close">Close</string>
+    <string name="back">Back</string>
 
     <!-- Setup > Landing -->
     <string name="landing_title">Welcome to Tap, Tap</string>

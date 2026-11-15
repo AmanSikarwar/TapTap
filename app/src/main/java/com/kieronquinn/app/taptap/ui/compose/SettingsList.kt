@@ -206,7 +206,7 @@ private fun SettingsAbout(item: SettingsItem.About, modifier: Modifier = Modifie
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                DrawableImage(R.mipmap.ic_launcher, Modifier.size(48.dp))
+                DrawableImage(R.mipmap.ic_launcher, 48.dp)
                 Column(Modifier.padding(start = 16.dp)) {
                     Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
                     Text(stringResource(R.string.about_version, BuildConfig.VERSION_NAME), style = MaterialTheme.typography.bodyMedium)

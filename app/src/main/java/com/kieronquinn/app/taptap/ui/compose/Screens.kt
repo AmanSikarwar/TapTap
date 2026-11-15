@@ -9,6 +9,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,7 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,4 +64,23 @@ fun AnimatedVector(@DrawableRes res: Int, modifier: Modifier = Modifier.size(128
     var atEnd by remember { mutableStateOf(false) }
     LaunchedEffect(res) { atEnd = true }
     Image(rememberAnimatedVectorPainter(image, atEnd), null, modifier)
+}
+
+@Composable
+fun SheetMessage(
+    title: String,
+    text: CharSequence,
+    positive: String,
+    onPositive: () -> Unit,
+    negative: String? = null,
+    onNegative: () -> Unit = {}
+) {
+    Column(Modifier.padding(horizontal = 24.dp).padding(bottom = 16.dp)) {
+        Text(title, style = MaterialTheme.typography.headlineSmall)
+        Text(text.toAnnotatedString(), Modifier.padding(vertical = 16.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)) {
+            negative?.let { OutlinedButton(onClick = onNegative) { Text(it) } }
+            Button(onClick = onPositive) { Text(positive) }
+        }
+    }
 }

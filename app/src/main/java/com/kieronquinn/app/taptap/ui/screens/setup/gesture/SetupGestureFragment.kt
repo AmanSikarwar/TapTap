@@ -25,7 +25,8 @@ import com.kieronquinn.app.taptap.databinding.FragmentSetupGestureBinding
 import com.kieronquinn.app.taptap.ui.base.BackAvailable
 import com.kieronquinn.app.taptap.ui.base.ProvidesBack
 import com.kieronquinn.app.taptap.ui.base.ProvidesTitle
-import com.kieronquinn.app.taptap.ui.screens.setup.base.BaseSetupFragment
+import androidx.activity.addCallback
+import com.kieronquinn.app.taptap.ui.base.BoundFragment
 import com.kieronquinn.app.taptap.ui.screens.setup.gesture.SetupGestureViewModel.InfoCard
 import com.kieronquinn.app.taptap.ui.screens.setup.gesture.SetupGestureViewModel.State
 import com.kieronquinn.app.taptap.ui.views.RippleView
@@ -50,17 +51,14 @@ import kotlin.math.roundToInt
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
-class SetupGestureFragment: BaseSetupFragment<FragmentSetupGestureBinding>(FragmentSetupGestureBinding::inflate), ProvidesBack {
+class SetupGestureFragment: BoundFragment<FragmentSetupGestureBinding>(FragmentSetupGestureBinding::inflate), ProvidesBack {
 
     private val configurationNavigation by inject<GestureConfigurationNavigation>()
 
     //Local state for resuming only
     private var isLoaded = false
 
-    override val viewModel by viewModel<SetupGestureViewModel>()
-    override val toolbar by lazy {
-        binding.toolbar
-    }
+    private val viewModel by viewModel<SetupGestureViewModel>()
 
     private val maxCardCornerRadius by lazy {
         resources.getDimension(R.dimen.margin_16)
@@ -101,6 +99,9 @@ class SetupGestureFragment: BaseSetupFragment<FragmentSetupGestureBinding>(Fragm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.root.setBackgroundColor(monet.getBackgroundColor(requireContext()))
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { onBackPressed() }
+        whenResumed { binding.toolbar.onNavigationIconClicked().collect { onBackPressed() } }
         setupState()
         setupLottie()
         setupMonet()
