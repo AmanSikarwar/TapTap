@@ -7,7 +7,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.google.android.columbus.ColumbusServiceWrapper
 import com.kieronquinn.app.taptap.BuildConfig
@@ -60,7 +62,11 @@ class TapTapForegroundService : LifecycleService(), KoinScopeComponent {
         fun start(context: Context, isRestart: Boolean = false) {
             val intent = getIntent(context, isRestart)
             context.stopService(intent)
-            context.startService(intent)
+            try {
+                ContextCompat.startForegroundService(context, intent)
+            } catch (e: IllegalStateException) {
+                Log.e("TapTapForegroundService", "Unable to start service", e)
+            }
         }
 
         fun stop(context: Context) {
@@ -90,7 +96,9 @@ class TapTapForegroundService : LifecycleService(), KoinScopeComponent {
 
     override fun onCreate() {
         super.onCreate()
-        startForegroundCompat(TapTapNotificationId.BACKGROUND.ordinal, createForegroundNotification())
+        if (!startForegroundCompat(TapTapNotificationId.BACKGROUND.ordinal, createForegroundNotification())) {
+            stopSelf()
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

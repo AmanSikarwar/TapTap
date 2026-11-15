@@ -76,7 +76,11 @@
             android:excludeFromRecents="true"/>
 
         <service android:name=".service.foreground.TapTapForegroundService"
-            android:foregroundServiceType="specialUse"/>
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Listens to the accelerometer and gyroscope to detect taps on the back of the device"/>
+        </service>
 
         <receiver android:name=".receivers.TapTapServiceStartReceiver"
             android:exported="true">
