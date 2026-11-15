@@ -25,13 +25,12 @@ class Backup {
         var feedbackWakeDevice: Boolean? = null
         var advancedLegacyWake: Boolean? = null
         var advancedAutoRestart: Boolean? = null
-        var advancedTensorLowPower: Boolean? = null
         //Skip hasPreviouslyGrantedSui
         var actionsTripleTapEnabled: Boolean? = null
         //Skip UI options
 
         override fun toString(): String {
-            return "Settings [serviceEnabled=$serviceEnabled, lowPowerMode=$lowPowerMode, chreLS=$columbusCHRELowSensitivity, csl=$columbusSensitivityLevel, ccs=$columbusCustomSensitivity, model=$columbusTapModel, leftHanded=$reachabilityLeftHanded, vibrate=$feedbackVibrate, dnd=$feedbackVibrateDND, wake=$feedbackWakeDevice, legacyWake=$advancedLegacyWake, restart=$advancedAutoRestart, tensorLowPower=$advancedTensorLowPower, tripleTapEnabled=$actionsTripleTapEnabled]"
+            return "Settings [serviceEnabled=$serviceEnabled, lowPowerMode=$lowPowerMode, chreLS=$columbusCHRELowSensitivity, csl=$columbusSensitivityLevel, ccs=$columbusCustomSensitivity, model=$columbusTapModel, leftHanded=$reachabilityLeftHanded, vibrate=$feedbackVibrate, dnd=$feedbackVibrateDND, wake=$feedbackWakeDevice, legacyWake=$advancedLegacyWake, restart=$advancedAutoRestart, tripleTapEnabled=$actionsTripleTapEnabled]"
         }
     }
 

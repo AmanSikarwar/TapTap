@@ -81,9 +81,6 @@ interface TapTapSettings {
     //Automatically restart the service periodically
     val advancedAutoRestart: TapTapSetting<Boolean>
 
-    //Whether to use EXECUTION_PREFERENCE_LOW_POWER for the nnapidelegate (tensor only) - default OFF
-    val advancedTensorLowPower: TapTapSetting<Boolean>
-
     //Whether the user has previously given sui permission - this is NOT used for the service, and is always verified
     val hasPreviouslyGrantedSui: TapTapSetting<Boolean>
 
@@ -224,9 +221,6 @@ class TapTapSettingsImpl(
         const val KEY_ADVANCED_CUSTOM_SENSITIVITY_CHRE = "advanced_custom_sensitivity_chre"
         const val KEY_ADVANCED_CUSTOM_SENSITIVITY = "advanced_custom_sensitivity"
 
-        const val KEY_ADVANCED_TENSOR_LOW_POWER = "advanced_tensor_low_power"
-        const val DEFAULT_ADVANCED_TENSOR_LOW_POWER = false
-
         const val KEY_HAS_PREVIOUSLY_GRANTED_SUI = "has_previously_granted_sui"
         const val DEFAULT_HAS_PREVIOUSLY_GRANTED_SUI = false
 
@@ -343,9 +337,6 @@ class TapTapSettingsImpl(
 
     override val advancedAutoRestart: TapTapSettings.TapTapSetting<Boolean> =
         TapTapSettingImpl(KEY_ADVANCED_AUTO_RESTART, DEFAULT_ADVANCED_AUTO_RESTART, SHARED_BOOLEAN)
-
-    override val advancedTensorLowPower: TapTapSettings.TapTapSetting<Boolean> =
-        TapTapSettingImpl(KEY_ADVANCED_TENSOR_LOW_POWER, DEFAULT_ADVANCED_TENSOR_LOW_POWER, SHARED_BOOLEAN)
 
     override val hasPreviouslyGrantedSui: TapTapSettings.TapTapSetting<Boolean> =
         TapTapSettingImpl(KEY_HAS_PREVIOUSLY_GRANTED_SUI, DEFAULT_HAS_PREVIOUSLY_GRANTED_SUI, SHARED_BOOLEAN)

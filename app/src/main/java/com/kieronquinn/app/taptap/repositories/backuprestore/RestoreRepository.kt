@@ -382,9 +382,6 @@ class RestoreRepositoryImpl(
         settings.advancedAutoRestart?.let {
             advancedAutoRestart.set(it)
         }
-        settings.advancedTensorLowPower?.let {
-            advancedTensorLowPower.set(it)
-        }
         settings.actionsTripleTapEnabled?.let {
             actionsTripleTapEnabled.set(it)
         }

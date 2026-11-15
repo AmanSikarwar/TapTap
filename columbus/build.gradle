@@ -54,8 +54,8 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.19.1'
 
-    //Tensorflow, used in non-CHRE usage
-    implementation "org.tensorflow:tensorflow-lite-support:$tensorflow_version"
+    //LiteRT (TensorFlow Lite), used in non-CHRE usage
+    implementation "com.google.ai.edge.litert:litert:$litert_version"
 
     //Protobuf
     api "com.google.protobuf:protobuf-javalite:4.36.2"

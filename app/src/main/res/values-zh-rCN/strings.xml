@@ -218,8 +218,6 @@
     <string name="setting_advanced_restart_service_desc">试图每小时自动重启 Tap, Tap 监听器组件。</string>
     <string name="setting_advanced_legacy_wake">传统唤醒设备方法</string>
     <string name="setting_advanced_legacy_wake_desc">使用传统的唤醒设备的方法，启用唤醒设备选项。这可能不会在所有设备上工作，但在少数罕见情况下可能更可靠。</string>
-    <string name="setting_advanced_tensor_low_power">Tensor 低功耗模式</string>
-    <string name="setting_advanced_tensor_low_power_desc">如果可用，将在 Tensor 处理器上运行低功耗模式; 如果你有性能问题或手势完全停止工作，请禁用。</string>
     <string name="settings_advanced_monet_color_picker">壁纸颜色</string>
     <string name="settings_advanced_monet_color_picker_desc">开启后Tap, Tap 界面将使用壁纸颜色</string>
     <string name="setting_advanced_custom_sensitivity">自定义灵敏度</string>

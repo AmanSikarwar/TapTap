@@ -106,7 +106,6 @@ class BackupRepositoryImpl(
             this.feedbackWakeDevice = settings.feedbackVibrate.getOrNull()
             this.advancedLegacyWake = settings.advancedLegacyWake.getOrNull()
             this.advancedAutoRestart = settings.advancedAutoRestart.getOrNull()
-            this.advancedTensorLowPower = settings.advancedTensorLowPower.getOrNull()
             this.actionsTripleTapEnabled = settings.actionsTripleTapEnabled.getOrNull()
         }
     }

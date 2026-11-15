@@ -14,7 +14,6 @@ abstract class SettingsAdvancedViewModel: GenericSettingsViewModel() {
     abstract val autoRestartServiceSetting: TapTapSettings.TapTapSetting<Boolean>
     abstract val isLowPowerModeEnabled: Boolean
     abstract val legacyWakeSetting: TapTapSettings.TapTapSetting<Boolean>
-    abstract val tensorLowPowerMode: TapTapSettings.TapTapSetting<Boolean>
 
     abstract fun onCustomSensitivityClicked()
     abstract fun onMonetClicked()
@@ -25,7 +24,6 @@ class SettingsAdvancedViewModelImpl(settings: TapTapSettings, context: Context, 
 
     override val autoRestartServiceSetting = settings.advancedAutoRestart
     override val legacyWakeSetting = settings.advancedLegacyWake
-    override val tensorLowPowerMode = settings.advancedTensorLowPower
 
     override val restartService = restartServiceCombine(autoRestartServiceSetting)
 

@@ -121,8 +121,8 @@ dependencies {
     //Samsung module for Samsung's implementation from RegiStar
     implementation project(path: ':samsung')
 
-    //Tensorflow, used by Columbus (change in :columbus too)
-    implementation 'org.tensorflow:tensorflow-lite-support:0.3.0'
+    //LiteRT (TensorFlow Lite), used by Columbus
+    implementation "com.google.ai.edge.litert:litert:$litert_version"
 
     //System stubs, shouldn't be included in the APK
     compileOnly project(path: ':systemstubs')

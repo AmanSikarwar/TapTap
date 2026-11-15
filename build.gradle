@@ -3,7 +3,7 @@ buildscript {
     ext.protobufVersion = '0.10.1'
     ext.nav_version = '2.10.2'
     ext.refine_version = '4.4.0'
-    ext.tensorflow_version = '0.3.0'
+    ext.litert_version = '2.3.2'
     repositories {
         google()
         mavenCentral()
