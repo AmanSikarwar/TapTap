@@ -5,7 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
+import androidx.activity.enableEdgeToEdge
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.ui.screens.root.RootSharedViewModel
 import com.kieronquinn.app.taptap.utils.extensions.EXTRA_KEY_IS_FROM_COLUMBUS
@@ -27,7 +27,7 @@ class MainActivity: MonetCompatActivity() {
         finishIfFromColumbus()
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
             && !intent.getBooleanExtra(EXTRA_SUPPRESS_SPLASH_DELAY, false)) {
             //TODO move when android.core:splashscreen supports animations
