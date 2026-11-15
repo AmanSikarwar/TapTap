@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.backuprestore
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.activity.result.ActivityResultLauncher
@@ -32,7 +34,7 @@ class SettingsBackupRestoreViewModelImpl(private val navigation: ContainerNaviga
 
     override fun onBackupFileClicked(uri: Uri) {
         viewModelScope.launch {
-            navigation.navigate(SettingsBackupRestoreFragmentDirections.actionSettingsBackupRestoreFragmentToSettingsBackupRestoreBackupFragment(uri))
+            navigation.navigate(ContainerKey.Backup(uri))
         }
     }
 
@@ -42,7 +44,7 @@ class SettingsBackupRestoreViewModelImpl(private val navigation: ContainerNaviga
 
     override fun onRestoreFileClicked(uri: Uri) {
         viewModelScope.launch {
-            navigation.navigate(SettingsBackupRestoreFragmentDirections.actionSettingsBackupRestoreFragmentToSettingsBackupRestoreRestoreFragment(uri))
+            navigation.navigate(ContainerKey.Restore(uri))
         }
     }
 

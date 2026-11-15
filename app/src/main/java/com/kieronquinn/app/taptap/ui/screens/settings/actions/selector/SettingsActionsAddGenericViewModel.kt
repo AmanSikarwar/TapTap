@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions.selector
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
@@ -13,8 +15,6 @@ import com.kieronquinn.app.taptap.models.action.ActionSupportedRequirement
 import com.kieronquinn.app.taptap.models.action.TapTapActionDirectory
 import com.kieronquinn.app.taptap.models.shared.SharedArgument
 import com.kieronquinn.app.taptap.repositories.actions.ActionsRepository
-import com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.packagename.SettingsSharedPackageSelectorFragment.Companion.FRAGMENT_EXTRA_SHOW_ALL_APPS
-import com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.packagename.SettingsSharedPackageSelectorFragment.Companion.FRAGMENT_EXTRA_TITLE
 import com.kieronquinn.app.taptap.utils.extensions.Shell_isRooted
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
@@ -44,41 +44,37 @@ abstract class SettingsActionsAddGenericViewModelImpl(private val navigation: Co
 
     override fun unwindToActions() {
         viewModelScope.launch {
-            navigation.navigateUpTo(R.id.nav_graph_add_action, true)
+            navigation.navigateUpTo(ContainerKey.ActionsAddCategory::class, true)
         }
     }
 
     override fun showAppShortcutPicker() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_shared_picker_app_shortcut)
+            navigation.navigate(ContainerKey.AppShortcutPicker)
         }
     }
 
     override fun showShortcutPicker() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_shared_picker_shortcut)
+            navigation.navigate(ContainerKey.ShortcutPicker)
         }
     }
 
     override fun showShizukuPermission(action: TapTapActionDirectory) {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_shared_shizuku_permission_flow, SharedArgument(action = action).toBundle())
+            navigation.navigate(ContainerKey.ShizukuPermission(SharedArgument(action = action)))
         }
     }
 
     override fun showSnapchatFlow(action: TapTapActionDirectory) {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_shared_snapchat, SharedArgument(action = action).toBundle())
+            navigation.navigate(ContainerKey.Snapchat(SharedArgument(action = action)))
         }
     }
 
     override fun showAppPicker(action: TapTapActionDirectory) {
         viewModelScope.launch {
-            val bundle = SharedArgument(action = action).toBundle().apply {
-                putBoolean(FRAGMENT_EXTRA_SHOW_ALL_APPS, false)
-                putInt(FRAGMENT_EXTRA_TITLE, R.string.action_launch_app)
-            }
-            navigation.navigate(R.id.action_global_nav_graph_shared_picker_package, bundle)
+            navigation.navigate(ContainerKey.PackagePicker(SharedArgument(action = action), R.string.action_launch_app, false))
         }
     }
 
@@ -94,13 +90,13 @@ abstract class SettingsActionsAddGenericViewModelImpl(private val navigation: Co
 
     override fun showQuickSettingPicker() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_shared_picker_quick_setting)
+            navigation.navigate(ContainerKey.QuickSettingPicker)
         }
     }
 
     override fun showNoRoot() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_shared_no_root)
+            navigation.navigate(ContainerKey.NoRoot)
         }
     }
 

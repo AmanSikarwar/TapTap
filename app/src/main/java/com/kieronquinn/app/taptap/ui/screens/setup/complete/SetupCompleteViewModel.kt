@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.complete
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.components.navigation.RootNavigation
@@ -25,7 +27,7 @@ class SetupCompleteViewModelImpl(private val rootNavigation: RootNavigation, pri
     override fun onBackPressed(): Boolean {
         viewModelScope.launch {
             //Jump back to info screen rather than dumping back on the gesture to allow it to re-setup
-            rootNavigation.navigateUpTo(R.id.setupInfoFragment)
+            rootNavigation.navigateUpTo(RootKey.SetupInfo::class)
         }
         return true
     }

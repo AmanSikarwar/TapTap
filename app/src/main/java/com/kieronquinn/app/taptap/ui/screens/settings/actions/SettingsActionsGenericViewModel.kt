@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
@@ -114,7 +116,7 @@ abstract class SettingsActionsGenericViewModelImpl<T : Action>(context: Context,
 
     override fun onAddActionFabClicked() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_add_action)
+            navigation.navigate(ContainerKey.ActionsAddCategory)
         }
     }
 

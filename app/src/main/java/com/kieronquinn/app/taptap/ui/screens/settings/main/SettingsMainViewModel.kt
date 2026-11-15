@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.main
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.os.PowerManager
 import androidx.lifecycle.viewModelScope
@@ -7,7 +9,6 @@ import com.kieronquinn.app.taptap.BuildConfig
 import com.kieronquinn.app.taptap.components.navigation.ContainerNavigation
 import com.kieronquinn.app.taptap.components.navigation.RootNavigation
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
-import com.kieronquinn.app.taptap.ui.screens.decision.DecisionFragmentDirections
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel
 import kotlinx.coroutines.launch
 
@@ -34,44 +35,44 @@ class SettingsMainViewModelImpl(private val navigation: ContainerNavigation, pri
 
     override fun onBatteryOptimisationClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMainFragmentDirections.actionSettingsMainFragmentToSettingsBatteryFragment())
+            navigation.navigate(ContainerKey.Battery)
         }
     }
 
     override fun onDoubleTapActionsClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMainFragmentDirections.actionSettingsMainFragmentToSettingsActionsDoubleFragment())
+            navigation.navigate(ContainerKey.ActionsDouble)
         }
     }
 
     override fun onTripleTapActionsClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMainFragmentDirections.actionSettingsMainFragmentToSettingsActionsTripleFragment())
+            navigation.navigate(ContainerKey.ActionsTriple)
         }
     }
 
     override fun onGatesClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMainFragmentDirections.actionSettingsMainFragmentToSettingsGatesFragment())
+            navigation.navigate(ContainerKey.Gates)
         }
     }
 
     override fun onFeedbackClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMainFragmentDirections.actionSettingsMainFragmentToSettingsFeedbackFragment())
+            navigation.navigate(ContainerKey.Feedback)
         }
     }
 
     override fun onReRunSetupClicked() {
         viewModelScope.launch {
-            rootNavigation.navigate(DecisionFragmentDirections.actionGlobalNavGraphSetup())
+            rootNavigation.navigate(RootKey.SetupLanding)
         }
     }
 
     override fun checkInternetPermission() {
         viewModelScope.launch {
             if (!settings.internetAllowed.exists()) {
-                rootNavigation.navigate(DecisionFragmentDirections.actionGlobalSharedInternetPermissionDialogFragment())
+                rootNavigation.navigate(RootKey.InternetPermission)
             }
         }
     }

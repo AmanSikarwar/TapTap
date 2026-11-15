@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.gesture
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.util.Log
 import androidx.annotation.DrawableRes
@@ -255,7 +257,7 @@ class SetupGestureViewModelImpl(
                 //Enable the service on continuing if it's not been disabled manually
                 settings.serviceEnabled.set(true)
             }
-            rootNavigation.navigate(SetupGestureFragmentDirections.actionSetupGestureFragmentToSetupCompleteFragment())
+            rootNavigation.navigate(RootKey.SetupComplete)
         }
     }
 

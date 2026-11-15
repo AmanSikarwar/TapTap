@@ -1,5 +1,8 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.backuprestore.backup
 
+import android.net.Uri
+import androidx.compose.runtime.LaunchedEffect
+import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -36,4 +39,10 @@ fun SettingsBackupRestoreBackupScreen(viewModel: SettingsBackupRestoreBackupView
             )
         }
     }
+}
+
+@Composable
+fun SettingsBackupRestoreBackupRoute(uri: Uri, viewModel: SettingsBackupRestoreBackupViewModel = koinViewModel()) {
+    LaunchedEffect(uri) { viewModel.setBackupUri(uri) }
+    SettingsBackupRestoreBackupScreen(viewModel)
 }

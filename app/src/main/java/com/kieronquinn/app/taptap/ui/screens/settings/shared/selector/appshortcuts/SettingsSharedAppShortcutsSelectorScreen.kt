@@ -1,5 +1,8 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.appshortcuts
 
+import com.kieronquinn.app.taptap.components.navigation.NavigationResults
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import android.graphics.drawable.BitmapDrawable
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
@@ -43,5 +46,14 @@ fun SettingsSharedAppShortcutsSelectorScreen(viewModel: SettingsSharedAppShortcu
                 }
             ) { Text(shortcut.name.toString()) }
         }
+    }
+}
+
+@Composable
+fun SettingsSharedAppShortcutsSelectorRoute(viewModel: SettingsSharedAppShortcutsSelectorViewModel = koinViewModel()) {
+    val results = koinInject<NavigationResults>()
+    SettingsSharedAppShortcutsSelectorScreen(viewModel) {
+        results.send(NavigationResults.Key.APP_SHORTCUT, it)
+        viewModel.onAppShortcutClicked()
     }
 }

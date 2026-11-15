@@ -1,5 +1,8 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.quicksetting
 
+import com.kieronquinn.app.taptap.components.navigation.NavigationResults
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
@@ -41,5 +44,14 @@ fun SettingsSharedQuickSettingSelectorScreen(viewModel: SettingsSharedQuickSetti
                 )
             }
         }
+    }
+}
+
+@Composable
+fun SettingsSharedQuickSettingSelectorRoute(viewModel: SettingsSharedQuickSettingSelectorViewModel = koinViewModel()) {
+    val results = koinInject<NavigationResults>()
+    SettingsSharedQuickSettingSelectorScreen(viewModel) {
+        results.send(NavigationResults.Key.QUICK_SETTING, it)
+        viewModel.onQuickSettingClicked()
     }
 }

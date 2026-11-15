@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.backuprestore.restore
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.net.Uri
 import androidx.annotation.DrawableRes
@@ -177,15 +179,14 @@ class SettingsBackupRestoreRestoreViewModelImpl(
                 SharedArgument(gate = TapTapGateDirectory.APP_SHOWING)
             }else{
                 SharedArgument(action = TapTapActionDirectory.LAUNCH_APP_SHORTCUT)
-            }.toBundle()
-            navigation.navigate(R.id.action_global_nav_graph_shared_shizuku_permission_flow, argument)
+            }
+            navigation.navigate(ContainerKey.ShizukuPermission(argument))
         }
     }
 
     override fun launchSnapchatFlow() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_shared_snapchat,
-                SharedArgument(action = TapTapActionDirectory.SNAPCHAT).toBundle())
+            navigation.navigate(ContainerKey.Snapchat(SharedArgument(action = TapTapActionDirectory.SNAPCHAT)))
         }
     }
 
@@ -380,7 +381,7 @@ class SettingsBackupRestoreRestoreViewModelImpl(
 
     override fun showNoRoot() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_shared_no_root)
+            navigation.navigate(ContainerKey.NoRoot)
         }
     }
 

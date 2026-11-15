@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.lowpower
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.viewModelScope
@@ -101,7 +103,7 @@ class SettingsLowPowerModelViewModelImpl(settings: TapTapSettings, context: Cont
 
     override fun onShizukuClicked(context: Context) {
         viewModelScope.launch {
-            navigation.navigate(SettingsLowPowerModeFragmentDirections.actionSettingsLowPowerModeFragmentToSettingsLowPowerModeShizukuInfoFragment())
+            navigation.navigate(ContainerKey.ShizukuInfo)
         }
     }
 

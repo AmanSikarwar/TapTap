@@ -35,6 +35,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kieronquinn.app.taptap.R
+import com.kieronquinn.app.taptap.components.navigation.NavigationResults
+import com.kieronquinn.app.taptap.models.gate.TapTapUIGate
+import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
+import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel.FabState.FabAction
+import com.kieronquinn.app.taptap.ui.screens.container.ShowFab
+import kotlinx.coroutines.flow.mapNotNull
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinActivityViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import com.kieronquinn.app.taptap.models.action.TapTapUIAction
 import com.kieronquinn.app.taptap.models.gate.TapTapUIWhenGate
 import com.kieronquinn.app.taptap.ui.compose.EditableCard
@@ -141,4 +150,43 @@ fun SettingsActionsWhenGatesScreen(
             }
         }
     }
+}
+
+@Composable
+fun SettingsActionsWhenGatesRoute(action: TapTapUIAction, isTriple: Boolean) {
+    val viewModel: SettingsActionsWhenGatesViewModel = if (isTriple) {
+        koinViewModel<SettingsActionsWhenGatesViewModelTriple>()
+    } else {
+        koinViewModel<SettingsActionsWhenGatesViewModelDouble>()
+    }
+    val context = LocalContext.current
+    val shared = koinActivityViewModel<ContainerSharedViewModel>()
+    val results = koinInject<NavigationResults>()
+    val fab by viewModel.fabState.collectAsStateWithLifecycle()
+    ShowFab(
+        when (fab) {
+            SettingsActionsWhenGatesViewModel.FabState.HIDDEN -> null
+            SettingsActionsWhenGatesViewModel.FabState.ADD -> FabAction.ADD_REQUIREMENT
+            SettingsActionsWhenGatesViewModel.FabState.DELETE -> FabAction.DELETE
+        }
+    )
+    LaunchedEffect(viewModel) {
+        results.receive<TapTapUIGate>(NavigationResults.Key.GATE).collect {
+            viewModel.handleGateResult(action.id, TapTapUIWhenGate(-1, it, false), context)
+        }
+    }
+    val events = remember(viewModel) {
+        shared.fabClicked.mapNotNull {
+            when (it) {
+                FabAction.ADD_REQUIREMENT -> WhenGatesEvent.Add
+                FabAction.DELETE -> WhenGatesEvent.Delete
+                else -> null
+            }
+        }
+    }
+    SettingsActionsWhenGatesScreen(
+        viewModel, action, events,
+        { id, size -> results.send(NavigationResults.Key.WHEN_GATES_SIZE, id to size) },
+        { shared.restartService(context) }
+    )
 }

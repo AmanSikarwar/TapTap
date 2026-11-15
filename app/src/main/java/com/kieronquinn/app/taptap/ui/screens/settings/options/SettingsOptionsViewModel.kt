@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.options
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.components.navigation.ContainerNavigation
@@ -49,25 +51,25 @@ class SettingsOptionsViewModelImpl(private val settings: TapTapSettings, context
 
     override fun onLowPowerModeClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsOptionsFragmentDirections.actionSettingsOptionsFragmentToSettingsLowPowerModeFragment())
+            navigation.navigate(ContainerKey.LowPower)
         }
     }
 
     override fun onNativeModeClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsOptionsFragmentDirections.actionSettingsOptionsFragmentToSettingsNativeModeFragment())
+            navigation.navigate(ContainerKey.NativeMode)
         }
     }
 
     override fun onAdvancedClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsOptionsFragmentDirections.actionSettingsOptionsFragmentToSettingsAdvancedFragment())
+            navigation.navigate(ContainerKey.Advanced)
         }
     }
 
     override fun onModelClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsOptionsFragmentDirections.actionSettingsOptionsFragmentToSettingsModelPickerFragment())
+            navigation.navigate(ContainerKey.ModelPicker)
         }
     }
 

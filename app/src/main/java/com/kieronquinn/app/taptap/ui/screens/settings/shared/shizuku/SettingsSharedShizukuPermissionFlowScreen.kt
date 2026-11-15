@@ -1,5 +1,8 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.shizuku
 
+import com.kieronquinn.app.taptap.components.navigation.NavigationResults
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,4 +70,10 @@ fun SettingsSharedShizukuPermissionFlowScreen(
         Text(stringResource(R.string.settings_shared_shizuku_permission_flow_error_content, stringResource(target)))
         ShizukuCards({ viewModel.onShizukuClicked(context) }, { viewModel.onSuiClicked(context) })
     }
+}
+
+@Composable
+fun SettingsSharedShizukuPermissionFlowRoute(argument: SharedArgument, viewModel: SettingsSharedShizukuPermissionFlowViewModel = koinViewModel()) {
+    val results = koinInject<NavigationResults>()
+    SettingsSharedShizukuPermissionFlowScreen(viewModel, argument) { results.send(NavigationResults.Key.SHIZUKU, argument to it) }
 }

@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.nativemode
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -126,7 +128,7 @@ class SettingsNativeModeViewModelImpl(
 
     override fun onShizukuClicked(context: Context) {
         viewModelScope.launch {
-            navigation.navigate(SettingsNativeModeFragmentDirections.actionSettingsNativeModeFragmentToSettingsLowPowerModeShizukuInfoFragment())
+            navigation.navigate(ContainerKey.ShizukuInfo)
         }
     }
 

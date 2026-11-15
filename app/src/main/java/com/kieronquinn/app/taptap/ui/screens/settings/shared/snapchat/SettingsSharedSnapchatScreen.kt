@@ -1,5 +1,9 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.snapchat
 
+import com.kieronquinn.app.taptap.components.navigation.NavigationResults
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import com.kieronquinn.app.taptap.models.shared.SharedArgument
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -74,4 +78,10 @@ fun SettingsSharedSnapchatScreen(viewModel: SettingsSharedSnapchatViewModel, onR
             Button(onClick = card.third.second) { Text(stringResource(card.third.first)) }
         }
     }
+}
+
+@Composable
+fun SettingsSharedSnapchatRoute(argument: SharedArgument, viewModel: SettingsSharedSnapchatViewModel = koinViewModel()) {
+    val results = koinInject<NavigationResults>()
+    SettingsSharedSnapchatScreen(viewModel) { results.send(NavigationResults.Key.SNAPCHAT, argument to it) }
 }

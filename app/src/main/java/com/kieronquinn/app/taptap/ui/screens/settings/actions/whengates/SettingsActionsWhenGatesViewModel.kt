@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions.whengates
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
@@ -113,7 +115,7 @@ abstract class SettingsActionsWhenGatesViewModelBase<T: WhenGate>(context: Conte
 
     override fun onAddRequirementFabClicked() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_add_gate, bundleOf("is_requirement" to true))
+            navigation.navigate(ContainerKey.GatesAddCategory(true))
         }
     }
 

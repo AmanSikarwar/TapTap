@@ -262,6 +262,7 @@ class TapTap : Application() {
         single<RootNavigation> { RootNavigationImpl() }
         single<ContainerNavigation> { ContainerNavigationImpl() }
         single<GestureConfigurationNavigation> { GestureConfigurationNavigationImpl() }
+        single { NavigationResults() }
     }
 
     private val columbusModule = module {

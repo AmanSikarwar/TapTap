@@ -1,5 +1,11 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.update
 
+import androidx.compose.runtime.LaunchedEffect
+import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
+import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel.FabState.FabAction
+import com.kieronquinn.app.taptap.ui.screens.container.ShowFab
+import org.koin.compose.viewmodel.koinActivityViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -83,4 +89,16 @@ private fun UpdateInfo(release: Release, viewModel: SettingsUpdateViewModel) {
             Text(stringResource(R.string.update_downloader_github))
         }
     }
+}
+
+@Composable
+fun SettingsUpdateRoute(release: Release, viewModel: SettingsUpdateViewModel = koinViewModel()) {
+    val shared = koinActivityViewModel<ContainerSharedViewModel>()
+    val showFab by viewModel.showFab.collectAsStateWithLifecycle()
+    LaunchedEffect(release) { viewModel.setupWithRelease(release) }
+    LaunchedEffect(viewModel) {
+        shared.fabClicked.collect { if (it == FabAction.DOWNLOAD) viewModel.startDownload() }
+    }
+    ShowFab(FabAction.DOWNLOAD.takeIf { showFab })
+    SettingsUpdateScreen(viewModel)
 }

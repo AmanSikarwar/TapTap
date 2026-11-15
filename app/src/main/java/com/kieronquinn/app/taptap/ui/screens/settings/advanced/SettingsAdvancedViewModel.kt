@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.advanced
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.components.navigation.ContainerNavigation
@@ -16,7 +18,6 @@ abstract class SettingsAdvancedViewModel: GenericSettingsViewModel() {
     abstract val legacyWakeSetting: TapTapSettings.TapTapSetting<Boolean>
 
     abstract fun onCustomSensitivityClicked()
-    abstract fun onMonetClicked()
 
 }
 
@@ -32,14 +33,9 @@ class SettingsAdvancedViewModelImpl(settings: TapTapSettings, context: Context, 
 
     override fun onCustomSensitivityClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsAdvancedFragmentDirections.actionSettingsAdvancedFragmentToSettingsAdvancedCustomSensitivityFragment())
+            navigation.navigate(ContainerKey.CustomSensitivity)
         }
     }
 
-    override fun onMonetClicked() {
-        viewModelScope.launch {
-            navigation.navigate(SettingsAdvancedFragmentDirections.actionSettingsAdvancedFragmentToSettingsWallpaperColorPickerBottomSheetFragment())
-        }
-    }
 
 }

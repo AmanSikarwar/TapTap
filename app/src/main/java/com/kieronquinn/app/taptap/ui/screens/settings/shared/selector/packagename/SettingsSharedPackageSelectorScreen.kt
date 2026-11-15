@@ -1,5 +1,10 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.packagename
 
+import com.kieronquinn.app.taptap.components.navigation.NavigationResults
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.runtime.LaunchedEffect
+import com.kieronquinn.app.taptap.models.shared.SharedArgument
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,5 +38,15 @@ fun SettingsSharedPackageSelectorScreen(viewModel: SettingsSharedPackageSelector
                 leading = { AppIcon(app.packageName) }
             )
         }
+    }
+}
+
+@Composable
+fun SettingsSharedPackageSelectorRoute(argument: SharedArgument, showAllApps: Boolean, viewModel: SettingsSharedPackageSelectorViewModel = koinViewModel()) {
+    val results = koinInject<NavigationResults>()
+    LaunchedEffect(showAllApps) { viewModel.setShowAllApps(showAllApps) }
+    SettingsSharedPackageSelectorScreen(viewModel) {
+        results.send(NavigationResults.Key.PACKAGE, argument to it)
+        viewModel.onAppClicked()
     }
 }

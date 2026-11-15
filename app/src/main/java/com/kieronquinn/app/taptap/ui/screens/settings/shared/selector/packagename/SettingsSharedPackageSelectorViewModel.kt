@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.packagename
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModel
@@ -51,7 +53,7 @@ class SettingsSharedPackageSelectorViewModelImpl(context: Context, private val n
 
     override fun onAppClicked() {
         viewModelScope.launch {
-            navigation.navigateUpTo(R.id.nav_graph_shared_picker_package, true)
+            navigation.navigateUpTo(ContainerKey.PackagePicker::class, true)
         }
     }
 

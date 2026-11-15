@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.appshortcuts
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.LauncherApps
@@ -149,7 +151,7 @@ class SettingsSharedAppShortcutsSelectorViewModelImpl(context: Context, private 
 
     override fun onAppShortcutClicked() {
         viewModelScope.launch {
-            navigation.navigateUpTo(R.id.nav_graph_shared_picker_app_shortcut, true)
+            navigation.navigateUpTo(ContainerKey.AppShortcutPicker::class, true)
         }
     }
 

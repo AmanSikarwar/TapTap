@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.shortcuts
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
@@ -79,7 +81,7 @@ class SettingsSharedShortcutsSelectorViewModelImpl(context: Context, private val
 
     override fun unwind() {
         viewModelScope.launch {
-            navigation.navigateUpTo(R.id.nav_graph_shared_picker_shortcut, true)
+            navigation.navigateUpTo(ContainerKey.ShortcutPicker::class, true)
         }
     }
 

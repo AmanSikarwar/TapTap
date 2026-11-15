@@ -20,6 +20,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import com.kieronquinn.app.taptap.components.navigation.NavigationResults
+import com.kieronquinn.app.taptap.ui.compose.ModeSwitch
+import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
+import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel.FabState.FabAction
+import com.kieronquinn.app.taptap.ui.screens.container.ShowFab
+import com.kieronquinn.app.taptap.ui.screens.settings.actions.tripletap.SettingsActionsTripleViewModel
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.merge
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinActivityViewModel
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -226,4 +239,47 @@ fun EmptyState(@DrawableRes icon: Int, @StringRes text: Int) {
         Icon(painterResource(icon), null, Modifier.size(64.dp), tint = MaterialTheme.colorScheme.primary)
         Text(stringResource(text), textAlign = TextAlign.Center, style = MaterialTheme.typography.bodyLarge)
     }
+}
+
+@Composable
+fun SettingsActionsRoute(viewModel: SettingsActionsGenericViewModel<*>, isTriple: Boolean) {
+    val context = LocalContext.current
+    val shared = koinActivityViewModel<ContainerSharedViewModel>()
+    val results = koinInject<NavigationResults>()
+    val fab by viewModel.fabState.collectAsStateWithLifecycle()
+    ShowFab(
+        when (fab) {
+            SettingsActionsGenericViewModel.FabState.HIDDEN -> null
+            SettingsActionsGenericViewModel.FabState.ADD -> FabAction.ADD_ACTION
+            SettingsActionsGenericViewModel.FabState.DELETE -> FabAction.DELETE
+        }
+    )
+    val events = remember(viewModel) {
+        merge(
+            results.receive<TapTapUIAction>(NavigationResults.Key.ACTION).map { ActionsEvent.Added(it) },
+            results.receive<Pair<Int, Int>>(NavigationResults.Key.WHEN_GATES_SIZE).map { ActionsEvent.WhenGatesSize(it.first, it.second) },
+            shared.fabClicked.mapNotNull {
+                when (it) {
+                    FabAction.ADD_ACTION -> ActionsEvent.Add
+                    FabAction.DELETE -> ActionsEvent.Delete
+                    else -> null
+                }
+            }
+        )
+    }
+    val header: (@Composable () -> Unit)? = (viewModel as? SettingsActionsTripleViewModel)?.let { triple ->
+        {
+            val enabled by triple.tripleTapEnabled.asFlow().collectAsState(triple.tripleTapEnabled.getSync())
+            ModeSwitch(
+                stringResource(R.string.switch_triple), enabled, true, triple::onTripleTapSwitchClicked,
+                Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+        }
+    }
+    SettingsActionsScreen(
+        viewModel, events, { shared.restartService(context) },
+        if (isTriple) R.drawable.ic_actions_triple else R.drawable.ic_actions,
+        if (isTriple) R.string.settings_actions_triple_empty else R.string.settings_actions_double_empty,
+        header
+    )
 }

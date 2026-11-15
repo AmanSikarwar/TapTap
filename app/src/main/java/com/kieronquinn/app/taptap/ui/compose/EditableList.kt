@@ -130,7 +130,7 @@ fun EditableCard(
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(
             containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer
-            else MaterialTheme.colorScheme.surfaceContainer
+            else MaterialTheme.colorScheme.surfaceBright
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 4.dp else 0.dp)
     ) {

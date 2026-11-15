@@ -1,5 +1,24 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.backuprestore.restore
 
+import android.Manifest
+import android.net.Uri
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import com.kieronquinn.app.taptap.components.navigation.NavigationResults
+import com.kieronquinn.app.taptap.models.action.ActionRequirement
+import com.kieronquinn.app.taptap.models.gate.GateRequirement
+import com.kieronquinn.app.taptap.models.shared.SharedArgument
+import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
+import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel.FabState
+import com.kieronquinn.app.taptap.ui.screens.container.ShowFab
+import com.kieronquinn.app.taptap.ui.screens.settings.backuprestore.restore.SettingsBackupRestoreRestoreViewModel.ResolvedRequirement
+import com.kieronquinn.app.taptap.ui.screens.settings.shared.RequirementRequester
+import com.kieronquinn.app.taptap.ui.screens.settings.shared.rememberRequirementRequester
+import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinActivityViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -85,7 +104,7 @@ private fun RequirementCard(item: Item.Requirement, onSetup: () -> Unit, onSkip:
     Card(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).alpha(if (item.isSupported) 1f else 0.5f),
         shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceBright)
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -115,4 +134,68 @@ private fun RequirementCard(item: Item.Requirement, onSetup: () -> Unit, onSkip:
             }
         }
     }
+}
+
+@Composable
+fun SettingsBackupRestoreRestoreRoute(uri: Uri, viewModel: SettingsBackupRestoreRestoreViewModel = koinViewModel()) {
+    val requester = rememberRequirementRequester()
+    val results = koinInject<NavigationResults>()
+    val scope = rememberCoroutineScope()
+    val shared = koinActivityViewModel<ContainerSharedViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(uri) { viewModel.setUri(uri) }
+    LaunchedEffect(viewModel) {
+        launch {
+            results.receive<Pair<SharedArgument, Boolean>>(NavigationResults.Key.SHIZUKU).collect { (_, granted) ->
+                if (granted) viewModel.onRequirementResolved(ResolvedRequirement.Action(ActionRequirement.Shizuku))
+            }
+        }
+        launch {
+            results.receive<Pair<SharedArgument, Boolean>>(NavigationResults.Key.SNAPCHAT).collect { (_, available) ->
+                if (available) viewModel.onRequirementResolved(ResolvedRequirement.Action(ActionRequirement.Snapchat))
+            }
+        }
+        launch {
+            shared.fabClicked.collect { if (it == FabState.FabAction.RESTORE_BACKUP) viewModel.onFabClicked() }
+        }
+    }
+    ShowFab(FabState.FabAction.RESTORE_BACKUP.takeIf { (state as? State.ActionRequired)?.isContinueEnabled == true })
+    BackHandler(enabled = state is State.Finished) { viewModel.onCloseClicked() }
+    SettingsBackupRestoreRestoreScreen(viewModel) { item ->
+        scope.launch {
+            //Take the first requirement as the list is dynamic
+            when (val requirement = item.requirements.firstOrNull() ?: return@launch) {
+                is ResolvedRequirement.Action -> requester.resolve(requirement.requirement, viewModel)
+                is ResolvedRequirement.Gate -> requester.resolve(requirement.requirement, viewModel)
+            }
+        }
+    }
+}
+
+private suspend fun RequirementRequester.resolve(requirement: ActionRequirement, viewModel: SettingsBackupRestoreRestoreViewModel) {
+    val result = when (requirement) {
+        is ActionRequirement.Accessibility -> requestAccessibilityService()
+        is ActionRequirement.AnswerPhoneCallsPermission -> requestPermission(Manifest.permission.ANSWER_PHONE_CALLS, Manifest.permission.READ_PHONE_STATE)
+        is ActionRequirement.GestureAccessibility -> requestGestureService()
+        is ActionRequirement.TaskerPermission -> requestTaskerPermission()
+        is ActionRequirement.AccessNotificationPolicyPermission -> requestNotificationPolicy()
+        is ActionRequirement.CameraPermission -> requestPermission(Manifest.permission.CAMERA)
+        is ActionRequirement.DrawOverOtherAppsPermission -> requestDisplayOverOtherApps()
+        is ActionRequirement.WriteSystemSettingsPermission -> requestWriteSystemSettings()
+        is ActionRequirement.Shizuku -> false.also { viewModel.launchShizukuFlow(false) }
+        is ActionRequirement.Root -> viewModel.checkRoot().also { if (!it) viewModel.showNoRoot() }
+        is ActionRequirement.Snapchat -> false.also { viewModel.launchSnapchatFlow() }
+        else -> false
+    }
+    if (result) viewModel.onRequirementResolved(ResolvedRequirement.Action(requirement))
+}
+
+private suspend fun RequirementRequester.resolve(requirement: GateRequirement, viewModel: SettingsBackupRestoreRestoreViewModel) {
+    val result = when (requirement) {
+        is GateRequirement.Accessibility -> requestAccessibilityService()
+        is GateRequirement.ReadPhoneStatePermission -> requestPermission(Manifest.permission.READ_PHONE_STATE)
+        is GateRequirement.Shizuku -> false.also { viewModel.launchShizukuFlow(true) }
+        else -> false
+    }
+    if (result) viewModel.onRequirementResolved(ResolvedRequirement.Gate(requirement))
 }
