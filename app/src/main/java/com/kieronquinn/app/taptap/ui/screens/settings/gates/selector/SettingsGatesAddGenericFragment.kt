@@ -2,16 +2,13 @@ package com.kieronquinn.app.taptap.ui.screens.settings.gates.selector
 
 import android.Manifest
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
-import androidx.viewbinding.ViewBinding
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.components.accessibility.TapTapAccessibilityRouter
 import com.kieronquinn.app.taptap.models.gate.GateDataTypes
@@ -21,7 +18,7 @@ import com.kieronquinn.app.taptap.models.gate.TapTapUIGate
 import com.kieronquinn.app.taptap.models.shared.ARG_NAME_SHARED_ARGUMENT
 import com.kieronquinn.app.taptap.models.shared.SharedArgument
 import com.kieronquinn.app.taptap.service.accessibility.TapTapAccessibilityService
-import com.kieronquinn.app.taptap.ui.base.BoundFragment
+import com.kieronquinn.app.taptap.ui.base.ComposeFragment
 import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
 import com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.packagename.SettingsSharedPackageSelectorFragment
 import com.kieronquinn.app.taptap.ui.screens.settings.shared.shizuku.SettingsSharedShizukuPermissionFlowFragment
@@ -41,8 +38,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-abstract class SettingsGatesAddGenericFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGroup?, Boolean) -> T) :
-    BoundFragment<T>(inflate) {
+abstract class SettingsGatesAddGenericFragment : ComposeFragment() {
 
     companion object {
         const val FRAGMENT_RESULT_KEY_GATE = "fragment_result_gate"
