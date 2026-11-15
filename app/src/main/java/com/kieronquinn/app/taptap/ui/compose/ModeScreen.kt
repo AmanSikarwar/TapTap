@@ -36,17 +36,22 @@ fun ModeScreen(
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        ListItem(
-            checked = checked,
-            onCheckedChange = { onToggle() },
-            enabled = enabled,
-            modifier = Modifier.padding(top = 8.dp).clip(MaterialTheme.shapes.extraLargeIncreased),
-            colors = ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-            ),
-            trailingContent = { Switch(checked = checked, onCheckedChange = null, enabled = enabled) }
-        ) { Text(switchLabel, style = MaterialTheme.typography.titleLarge) }
+        ModeSwitch(switchLabel, checked, enabled, onToggle, Modifier.padding(top = 8.dp))
         content()
     }
+}
+
+@Composable
+fun ModeSwitch(label: String, checked: Boolean, enabled: Boolean, onToggle: () -> Unit, modifier: Modifier = Modifier) {
+    ListItem(
+        checked = checked,
+        onCheckedChange = { onToggle() },
+        enabled = enabled,
+        modifier = modifier.clip(MaterialTheme.shapes.extraLargeIncreased),
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        ),
+        trailingContent = { Switch(checked = checked, onCheckedChange = null, enabled = enabled) }
+    ) { Text(label, style = MaterialTheme.typography.titleLarge) }
 }

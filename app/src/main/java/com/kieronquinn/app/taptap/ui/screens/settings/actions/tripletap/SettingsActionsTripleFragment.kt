@@ -1,44 +1,27 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions.tripletap
 
-import android.os.Bundle
-import android.view.View
-import com.kieronquinn.app.taptap.databinding.FragmentSettingsActionsTripleBinding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.repositories.room.actions.TripleTapAction
-import com.kieronquinn.app.taptap.ui.base.BackAvailable
-import com.kieronquinn.app.taptap.ui.base.LockCollapsed
+import com.kieronquinn.app.taptap.ui.compose.ModeSwitch
 import com.kieronquinn.app.taptap.ui.screens.settings.actions.SettingsActionsGenericFragment
-import com.kieronquinn.app.taptap.utils.extensions.onClicked
-import com.kieronquinn.app.taptap.utils.extensions.whenResumed
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActionsTripleFragment: SettingsActionsGenericFragment<FragmentSettingsActionsTripleBinding, TripleTapAction>(FragmentSettingsActionsTripleBinding::inflate), LockCollapsed, BackAvailable {
+class SettingsActionsTripleFragment: SettingsActionsGenericFragment<TripleTapAction>() {
 
     override val viewModel by viewModel<SettingsActionsTripleViewModel>()
+    override val emptyIcon = R.drawable.ic_actions_triple
+    override val emptyText = R.string.settings_actions_triple_empty
 
-    override fun getLoadingProgressView() = binding.settingsActionsTripleLoadingProgress
-    override fun getLoadingView() = binding.settingsActionsTripleLoading
-    override fun getRecyclerView() = binding.settingsActionsTripleRecyclerview
-    override fun getEmptyView() = binding.settingsActionsTripleEmpty
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupSwitchState()
-        setupSwitchClicked()
-    }
-
-    private fun setupSwitchState() {
-        binding.settingsActionsTripleSwitch.isChecked = viewModel.tripleTapEnabled.getSync()
-        whenResumed {
-            viewModel.tripleTapEnabled.asFlow().collect {
-                binding.settingsActionsTripleSwitch.isChecked = it
-            }
-        }
-    }
-
-    private fun setupSwitchClicked() = whenResumed {
-        binding.settingsActionsTripleSwitch.onClicked().collect {
-            viewModel.onTripleTapSwitchClicked()
-        }
+    override val header: @Composable () -> Unit = {
+        val enabled by viewModel.tripleTapEnabled.asFlow().collectAsState(viewModel.tripleTapEnabled.getSync())
+        ModeSwitch(stringResource(R.string.switch_triple), enabled, true, viewModel::onTripleTapSwitchClicked, Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
     }
 
 }
