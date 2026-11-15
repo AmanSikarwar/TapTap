@@ -14,12 +14,12 @@ def tagName = '1.6.2'
 def tagVersion = 1620
 
 android {
-    compileSdk 35
+    compileSdk 37
 
     defaultConfig {
         applicationId "com.kieronquinn.app.taptap"
         minSdk 24
-        targetSdk 35
+        targetSdk 37
         versionCode tagVersion
         versionName tagName
 
