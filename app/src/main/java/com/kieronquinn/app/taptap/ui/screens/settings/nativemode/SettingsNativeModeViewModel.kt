@@ -8,7 +8,6 @@ import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.components.navigation.ContainerNavigation
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
 import com.kieronquinn.app.taptap.components.sui.SuiProvider
-import com.kieronquinn.app.taptap.ui.views.MonetSwitch
 import com.kieronquinn.app.taptap.utils.extensions.Shizuku_requestPermissionIfNeeded
 import com.kieronquinn.app.taptap.utils.extensions.getColumbusSetupNotificationRequiredFlow
 import com.kieronquinn.app.taptap.utils.extensions.isNativeColumbusEnabled
@@ -34,7 +33,7 @@ abstract class SettingsNativeModeViewModel: ViewModel(), KoinScopeComponent, Koi
     abstract fun checkState(context: Context)
     abstract fun onShizukuClicked(context: Context)
     abstract fun onSuiClicked()
-    abstract fun onSwitchClicked(switch: MonetSwitch)
+    abstract fun onSwitchClicked(context: Context)
 
 }
 
@@ -77,8 +76,7 @@ class SettingsNativeModeViewModelImpl(
         scope.close()
     }
 
-    override fun onSwitchClicked(switch: MonetSwitch) {
-        switch.isChecked = nativeModeEnabled.value
+    override fun onSwitchClicked(context: Context) {
         viewModelScope.launch {
             if(!nativeModeEnabled.value) {
                 //Check permission first
@@ -86,18 +84,17 @@ class SettingsNativeModeViewModelImpl(
                 if (permissionGranted == null) {
                     //Shizuku is not running
                     Toast.makeText(
-                        switch.context,
+                        context,
                         R.string.settings_low_power_mode_error_toast,
                         Toast.LENGTH_LONG
                     ).show()
                 }
                 if (permissionGranted != true) {
-                    switch.isChecked = false
                     return@launch
                 }
             }
             navigation.navigate(settingsIntent ?: return@launch)
-            if(switch.context.isNativeColumbusEnabled()) {
+            if(context.isNativeColumbusEnabled()) {
                 toastBus.emit(R.string.settings_native_mode_launch_toast_disable)
             }else{
                 toastBus.emit(R.string.settings_native_mode_launch_toast)

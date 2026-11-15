@@ -1,81 +1,69 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.internet
 
-import android.app.Dialog
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.kieronquinn.app.taptap.R
-import com.kieronquinn.app.taptap.databinding.FragmentDialogInternetPermissionBinding
-import com.kieronquinn.app.taptap.ui.base.BaseDialogFragment
-import com.kieronquinn.app.taptap.utils.extensions.onClicked
-import com.kieronquinn.app.taptap.utils.extensions.whenResumed
-import com.kieronquinn.monetcompat.extensions.views.overrideRippleColor
+import com.kieronquinn.app.taptap.ui.base.ComposeDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsSharedInternetPermissionDialogFragment: BaseDialogFragment<FragmentDialogInternetPermissionBinding>(FragmentDialogInternetPermissionBinding::inflate) {
+class SettingsSharedInternetPermissionDialogFragment: ComposeDialogFragment() {
 
     private val viewModel by viewModel<SettingsSharedInternetPermissionDialogViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isCancelable = false
-        setupMonet()
-        setupButtons()
-        setupDismiss()
     }
 
-    private fun setupMonet(){
-        val background = monet.getBackgroundColorSecondary(requireContext()) ?: monet.getBackgroundColor(requireContext())
-        dialog?.window?.setBackgroundDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.background_dialog_internet_permission)?.apply {
-            setTint(background)
-        })
-        val accent = monet.getAccentColor(requireContext())
-        binding.dialogInternetPermissionIcon.imageTintList = ColorStateList.valueOf(accent)
-        binding.dialogInternetPermissionAlways.run {
-            strokeColor = ColorStateList.valueOf(accent)
-            overrideRippleColor(accent)
+    @Composable
+    override fun Content() {
+        LaunchedEffect(viewModel) {
+            viewModel.dismissBus.collect { dismiss() }
         }
-        binding.dialogInternetPermissionRunning.run {
-            strokeColor = ColorStateList.valueOf(accent)
-            overrideRippleColor(accent)
-        }
+        InternetPermissionDialog(viewModel)
     }
 
-    private fun setupButtons(){
-        whenResumed {
-            binding.dialogInternetPermissionAlways.onClicked().collect {
-                viewModel.onAllowAlwaysClicked()
+}
+
+@Composable
+fun InternetPermissionDialog(viewModel: SettingsSharedInternetPermissionDialogViewModel) {
+    Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
+        Column(
+            Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(painterResource(R.drawable.ic_internet), null, tint = MaterialTheme.colorScheme.secondary)
+            Text(stringResource(R.string.dialog_internet_permission_text), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+            Text(stringResource(R.string.dialog_internet_permission_desc), textAlign = TextAlign.Center)
+            Button(onClick = viewModel::onAllowAlwaysClicked, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.dialog_internet_permission_allow_always))
             }
-        }
-        whenResumed {
-            binding.dialogInternetPermissionRunning.onClicked().collect {
-                viewModel.onAllowRunningClicked()
+            FilledTonalButton(onClick = viewModel::onAllowRunningClicked, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.dialog_internet_permission_allow_open))
             }
-        }
-        whenResumed {
-            binding.dialogInternetPermissionDeny.onClicked().collect {
-                viewModel.onDenyClicked()
+            TextButton(onClick = viewModel::onDenyClicked, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.dialog_internet_permission_deny))
             }
         }
     }
-
-    private fun setupDismiss() = whenResumed {
-        viewModel.dismissBus.collect {
-            dismissWithAnimation()
-        }
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.window?.let {
-            WindowCompat.setDecorFitsSystemWindows(it, false)
-            it.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-            it.attributes.windowAnimations = R.style.DialogAnimation
-        }
-        return dialog
-    }
-
 }

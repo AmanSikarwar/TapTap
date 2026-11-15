@@ -4,21 +4,14 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
+import androidx.compose.runtime.Composable
+import com.kieronquinn.app.taptap.ui.base.ComposeFragment
 import android.view.View
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.view.isVisible
 import com.kieronquinn.app.taptap.R
-import com.kieronquinn.app.taptap.databinding.FragmentSettingsNativeModeBinding
 import com.kieronquinn.app.taptap.ui.activities.MainActivity
 import com.kieronquinn.app.taptap.ui.base.BackAvailable
-import com.kieronquinn.app.taptap.ui.base.BoundFragment
 import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
-import com.kieronquinn.app.taptap.ui.views.MonetSwitch
-import com.kieronquinn.app.taptap.utils.extensions.applyBottomInsets
-import com.kieronquinn.app.taptap.utils.extensions.onClicked
-import com.kieronquinn.app.taptap.utils.extensions.whenCreated
-import com.kieronquinn.app.taptap.utils.extensions.whenResumed
 import com.kieronquinn.app.taptap.utils.notifications.TapTapNotificationChannel
 import com.kieronquinn.app.taptap.utils.notifications.TapTapNotificationId
 import com.kieronquinn.app.taptap.utils.notifications.TapTapNotificationIntentId
@@ -26,89 +19,22 @@ import kotlinx.coroutines.delay
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsNativeModeFragment: BoundFragment<FragmentSettingsNativeModeBinding>(FragmentSettingsNativeModeBinding::inflate), BackAvailable {
+class SettingsNativeModeFragment: ComposeFragment(), BackAvailable {
 
     private val viewModel by viewModel<SettingsNativeModeViewModel>()
     private val containerViewModel by activityViewModel<ContainerSharedViewModel>()
 
+    @Composable
+    override fun Content() = SettingsNativeModeScreen(viewModel, ::showSetupNotification)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         containerViewModel.setSuppressColumbusRestart(true)
-        setupSwitch()
-        setupSwitchEnabled()
-        setupSwitchChecked()
-        setupShizuku()
-        setupShizukuButton()
-        setupSuiButton()
-        setupScrollView()
-        setupToastBus()
-        setupNotification()
     }
 
     override fun onDestroyView() {
         containerViewModel.setSuppressColumbusRestart(false)
         super.onDestroyView()
-    }
-
-    private fun setupSwitch() = whenResumed {
-        binding.settingsNativeModeEnable.onClicked().collect {
-            viewModel.onSwitchClicked(it as MonetSwitch)
-        }
-    }
-
-    private fun setupSwitchChecked() {
-        binding.settingsNativeModeEnable.isChecked = viewModel.nativeModeEnabled.value
-        whenResumed {
-            viewModel.nativeModeEnabled.collect {
-                binding.settingsNativeModeEnable.isChecked = it
-            }
-        }
-    }
-
-    private fun setupSwitchEnabled() = whenResumed {
-        viewModel.switchEnabled.collect {
-            binding.settingsNativeModeEnable.isEnabled = it
-            binding.settingsNativeModeEnable.alpha = if(it) 1f else 0.5f
-        }
-    }
-
-    private fun setupShizuku() = whenResumed {
-        viewModel.shizukuInstalled.collect {
-            binding.settingsLowPowerModeErrorShizuku.isVisible = !it
-        }
-    }
-
-    private fun setupShizukuButton() = whenResumed {
-        binding.settingsLowPowerModeErrorButtonShizuku.onClicked().collect {
-            viewModel.onShizukuClicked(requireContext())
-        }
-    }
-
-    private fun setupSuiButton() = whenResumed {
-        binding.settingsLowPowerModeErrorButtonSui.onClicked().collect {
-            viewModel.onSuiClicked()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.checkState(requireContext())
-    }
-
-    private fun setupScrollView() = with(binding.settingsNativeModeScrollView) {
-        applyBottomInsets(binding.root)
-    }
-
-    private fun setupToastBus() = whenResumed {
-        viewModel.toastBus.collect {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun setupNotification() = lifecycle.whenCreated {
-        viewModel.setupNotificationBus.collect {
-            showSetupNotification()
-        }
     }
 
     private suspend fun showSetupNotification() = with(TapTapNotificationChannel.NativeSetup) {

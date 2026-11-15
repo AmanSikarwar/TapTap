@@ -1,101 +1,75 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.advanced.customsensitivity
 
-import android.os.Bundle
-import android.view.View
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import com.kieronquinn.app.taptap.R
-import com.kieronquinn.app.taptap.databinding.FragmentSettingsAdvancedCustomSensitivityBinding
-import com.kieronquinn.app.taptap.ui.base.BaseBottomSheetFragment
+import com.kieronquinn.app.taptap.ui.base.ComposeBottomSheetFragment
 import com.kieronquinn.app.taptap.ui.screens.container.ContainerSharedViewModel
-import com.kieronquinn.app.taptap.utils.extensions.onApplyInsets
-import com.kieronquinn.app.taptap.utils.extensions.onChanged
-import com.kieronquinn.app.taptap.utils.extensions.onClicked
-import com.kieronquinn.app.taptap.utils.extensions.whenResumed
-import com.kieronquinn.monetcompat.extensions.views.applyMonet
-import kotlinx.coroutines.flow.take
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsAdvancedCustomSensitivityFragment: BaseBottomSheetFragment<FragmentSettingsAdvancedCustomSensitivityBinding>(FragmentSettingsAdvancedCustomSensitivityBinding::inflate) {
+class SettingsAdvancedCustomSensitivityFragment: ComposeBottomSheetFragment() {
 
     private val viewModel by viewModel<SettingsAdvancedCustomSensitivityViewModel>()
     private val sharedViewModel by activityViewModel<ContainerSharedViewModel>()
 
-    private val accent by lazy {
-        monet.getAccentColor(requireContext())
+    @Composable
+    override fun ColumnScope.Content() = CustomSensitivitySheet(viewModel) {
+        sharedViewModel.restartService(requireContext())
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupInsets(view)
-        setupValue()
-        setupError()
-        setupPositive()
-        setupNegative()
-        setupNeutral()
-        setupRestart()
-    }
+}
 
-    private fun setupInsets(view: View) {
-        binding.root.onApplyInsets { _, insets ->
-            val bottomPadding = resources.getDimension(R.dimen.margin_16).toInt()
-            val bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            view.updatePadding(bottom = bottomInset + bottomPadding)
-        }
+@Composable
+fun CustomSensitivitySheet(viewModel: SettingsAdvancedCustomSensitivityViewModel, onRestartService: () -> Unit) {
+    var text by remember { mutableStateOf(viewModel.customSensitivity.value) }
+    val valid by viewModel.isSensitivityValid.collectAsState(true)
+    LaunchedEffect(viewModel) {
+        viewModel.restartService?.collect { onRestartService() }
     }
-
-    private fun setupValue() = whenResumed {
-        binding.settingsAdvancedCustomSensitivityInput.applyMonet()
-        binding.settingsAdvancedCustomSensitivityEdit.applyMonet()
-        viewModel.customSensitivity.take(1).collect {
-            binding.settingsAdvancedCustomSensitivityEdit.text?.run {
-                clear()
-                append(it)
-            } ?: run {
-                binding.settingsAdvancedCustomSensitivityEdit.setText(it)
+    Column(Modifier.padding(horizontal = 24.dp).padding(bottom = 16.dp)) {
+        Text(stringResource(R.string.bs_advanced_custom_sensitivity), style = MaterialTheme.typography.headlineSmall)
+        OutlinedTextField(
+            value = text,
+            onValueChange = {
+                text = it
+                viewModel.setValue(it)
+            },
+            label = { Text(stringResource(R.string.bs_advanced_custom_sensitivity_hint)) },
+            isError = !valid,
+            supportingText = if (valid) null else ({ Text(stringResource(R.string.bs_advanced_custom_sensitivity_invalid)) }),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+        )
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            TextButton(onClick = viewModel::onNeutralClicked) { Text(stringResource(R.string.bs_advanced_custom_sensitivity_reset)) }
+            Row(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)) {
+                TextButton(onClick = viewModel::onNegativeClicked) { Text(stringResource(android.R.string.cancel)) }
+                Button(onClick = viewModel::onPositiveClicked, enabled = valid) { Text(stringResource(android.R.string.ok)) }
             }
         }
-        binding.settingsAdvancedCustomSensitivityEdit.onChanged().collect {
-            viewModel.setValue(it?.toString() ?: return@collect)
-        }
     }
-
-    private fun setupError() = whenResumed {
-        viewModel.isSensitivityValid.collect {
-            binding.settingsAdvancedCustomSensitivityInput.error = if(it) null else {
-                getString(R.string.bs_advanced_custom_sensitivity_invalid)
-            }
-            binding.settingsAdvancedCustomSensitivityInput.isErrorEnabled = !it
-            binding.settingsAdvancedCustomSensitivityPositive.alpha = if(it) 1f else 0.5f
-        }
-    }
-
-    private fun setupPositive() = whenResumed {
-        binding.settingsAdvancedCustomSensitivityPositive.setTextColor(accent)
-        binding.settingsAdvancedCustomSensitivityPositive.onClicked().collect {
-            viewModel.onPositiveClicked()
-        }
-    }
-
-    private fun setupNegative() = whenResumed {
-        binding.settingsAdvancedCustomSensitivityNegative.setTextColor(accent)
-        binding.settingsAdvancedCustomSensitivityNegative.onClicked().collect {
-            viewModel.onNegativeClicked()
-        }
-    }
-
-    private fun setupNeutral() = whenResumed {
-        binding.settingsAdvancedCustomSensitivityNeutral.setTextColor(accent)
-        binding.settingsAdvancedCustomSensitivityNeutral.onClicked().collect {
-            viewModel.onNeutralClicked()
-        }
-    }
-
-    private fun setupRestart() = whenResumed {
-        viewModel.restartService?.collect {
-            sharedViewModel.restartService(requireContext())
-        }
-    }
-
 }

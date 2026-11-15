@@ -1,43 +1,21 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.gates.help
 
-import android.os.Bundle
-import android.view.View
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.kieronquinn.app.taptap.R
-import com.kieronquinn.app.taptap.databinding.FragmentSettingsGatesHelpBinding
-import com.kieronquinn.app.taptap.ui.base.BaseBottomSheetFragment
-import com.kieronquinn.app.taptap.utils.extensions.onApplyInsets
-import com.kieronquinn.app.taptap.utils.extensions.onClicked
-import com.kieronquinn.app.taptap.utils.extensions.whenResumed
+import com.kieronquinn.app.taptap.ui.base.ComposeBottomSheetFragment
+import com.kieronquinn.app.taptap.ui.compose.SheetMessage
 
-class SettingsGatesHelpBottomSheetFragment: BaseBottomSheetFragment<FragmentSettingsGatesHelpBinding>(FragmentSettingsGatesHelpBinding::inflate) {
+class SettingsGatesHelpBottomSheetFragment: ComposeBottomSheetFragment() {
 
-    private val accent by lazy {
-        monet.getAccentColor(requireContext())
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupInsets(view)
-        setupButtons()
-    }
-
-    private fun setupInsets(view: View) {
-        binding.root.onApplyInsets { _, insets ->
-            val bottomPadding = resources.getDimension(R.dimen.margin_16).toInt()
-            val bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            view.updatePadding(bottom = bottomInset + bottomPadding)
-        }
-    }
-
-    private fun setupButtons(){
-        binding.settingsGatesHelpPositive.setTextColor(accent)
-        whenResumed {
-            binding.settingsGatesHelpPositive.onClicked().collect {
-                dismiss()
-            }
-        }
-    }
+    @Composable
+    override fun ColumnScope.Content() = SheetMessage(
+        title = stringResource(R.string.bs_help_gate_title),
+        text = LocalContext.current.getText(R.string.bs_help_gate),
+        positive = stringResource(android.R.string.ok),
+        onPositive = ::dismiss
+    )
 
 }
