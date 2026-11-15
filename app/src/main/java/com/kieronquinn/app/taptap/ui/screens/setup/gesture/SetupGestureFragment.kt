@@ -47,6 +47,8 @@ import kotlinx.coroutines.delay
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class SetupGestureFragment: BaseSetupFragment<FragmentSetupGestureBinding>(FragmentSetupGestureBinding::inflate), ProvidesBack {
 
@@ -146,7 +148,7 @@ class SetupGestureFragment: BaseSetupFragment<FragmentSetupGestureBinding>(Fragm
         }
     }
 
-    private fun startDemoMode() = whenResumed {
+    private fun startDemoMode() = viewLifecycleOwner.lifecycleScope.launch {
         delay(100L)
         viewModel.startDemoMode(requireContext())
     }

@@ -20,10 +20,6 @@ abstract class BaseSetupFragment<T: ViewBinding>(inflate: (LayoutInflater, ViewG
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupMonet()
-    }
-
-    override fun onResume() {
-        super.onResume()
         setupBack()
     }
 
