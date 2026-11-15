@@ -1,33 +1,11 @@
 package com.kieronquinn.app.taptap.ui.screens.nogyro
 
-import android.graphics.drawable.AnimatedVectorDrawable
-import android.os.Bundle
-import android.view.View
-import com.kieronquinn.app.taptap.databinding.FragmentNoGyroscopeBinding
-import com.kieronquinn.app.taptap.ui.base.BoundFragment
+import androidx.compose.runtime.Composable
+import com.kieronquinn.app.taptap.ui.base.ComposeFragment
 
-class NoGyroscopeFragment: BoundFragment<FragmentNoGyroscopeBinding>(FragmentNoGyroscopeBinding::inflate) {
+class NoGyroscopeFragment: ComposeFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupMonet()
-        setupAvd()
-        setupButton()
-    }
-
-    private fun setupMonet() {
-        binding.root.setBackgroundColor(monet.getBackgroundColor(requireContext()))
-        binding.noGyroscopeClose.setTextColor(monet.getAccentColor(requireContext()))
-    }
-
-    private fun setupAvd() {
-        (binding.noGyroscopeAvd.drawable as AnimatedVectorDrawable).start()
-    }
-
-    private fun setupButton() {
-        binding.noGyroscopeClose.setOnClickListener {
-            requireActivity().finish()
-        }
-    }
+    @Composable
+    override fun Content() = NoGyroscopeScreen(onClose = { requireActivity().finish() })
 
 }
