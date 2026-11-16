@@ -80,6 +80,7 @@ fun SelectorItem(
         onClick = onClick,
         enabled = enabled,
         shapes = ListItemDefaults.segmentedShapes(index, count),
+        colors = segmentedItemColors(),
         modifier = Modifier.padding(horizontal = 16.dp, vertical = ListItemDefaults.SegmentedGap / 2),
         leadingContent = leading ?: { Icon(painterResource(icon), null) },
         supportingContent = {

@@ -89,6 +89,20 @@ fun LazyListScope.settingsItems(items: List<SettingsItem>) {
 }
 
 @Composable
+fun segmentedItemColors() = ListItemDefaults.segmentedColors(containerColor = MaterialTheme.colorScheme.surfaceBright)
+
+@Composable
+private fun toggleItemColors() = MaterialTheme.colorScheme.let {
+    ListItemDefaults.segmentedColors(
+        containerColor = it.surfaceBright,
+        selectedContainerColor = it.surfaceBright,
+        selectedContentColor = it.onSurface,
+        selectedLeadingContentColor = it.onSurfaceVariant,
+        selectedSupportingContentColor = it.onSurfaceVariant
+    )
+}
+
+@Composable
 private fun SettingsRow(item: SettingsItem, index: Int, count: Int, modifier: Modifier) {
     val scope = rememberCoroutineScope()
     val enabled = item.isEnabled()
@@ -103,12 +117,12 @@ private fun SettingsRow(item: SettingsItem, index: Int, count: Int, modifier: Mo
             }
             if (item.onClick != null) {
                 SegmentedListItem(
-                    onClick = item.onClick, shapes = shapes, modifier = modifier, enabled = enabled,
+                    onClick = item.onClick, shapes = shapes, modifier = modifier, enabled = enabled, colors = segmentedItemColors(),
                     leadingContent = leading, supportingContent = supporting
                 ) { Text(title?.toString().orEmpty()) }
             } else {
                 SegmentedListItem(
-                    shapes = shapes, modifier = modifier, enabled = enabled,
+                    shapes = shapes, modifier = modifier, enabled = enabled, colors = segmentedItemColors(),
                     leadingContent = leading, supportingContent = supporting
                 ) { Text(title?.toString().orEmpty()) }
             }
@@ -117,11 +131,13 @@ private fun SettingsRow(item: SettingsItem, index: Int, count: Int, modifier: Mo
             val checked by item.setting.asFlow().collectAsState(item.setting.getSync())
             val toggle: () -> Unit = { scope.launch { item.setting.invert() } }
             SegmentedListItem(
-                onClick = toggle, shapes = shapes, modifier = modifier, enabled = enabled,
+                checked = checked, onCheckedChange = { toggle() }, shapes = shapes, modifier = modifier, enabled = enabled,
+                colors = toggleItemColors(),
+                verticalAlignment = Alignment.CenterVertically,
                 leadingContent = { Icon(painterResource(item.icon), null) },
                 supportingContent = resolveText(item.contentRes, item.content?.invoke())
                     ?.takeIf { it.isNotEmpty() }?.let { { Text(it.toAnnotatedString()) } },
-                trailingContent = { Switch(checked = checked, onCheckedChange = { toggle() }, enabled = enabled) }
+                trailingContent = { Switch(checked = checked, onCheckedChange = null, enabled = enabled) }
             ) { Text(resolveText(item.titleRes, item.title)?.toString().orEmpty()) }
         }
         is SettingsItem.Slider -> {
@@ -130,7 +146,7 @@ private fun SettingsRow(item: SettingsItem, index: Int, count: Int, modifier: Mo
             val value = if (dragging.isNaN()) stored.toFloat() else dragging
             val steps = item.stepSize?.let { ((item.maximumValue - item.minimumValue) / it).toInt() - 1 } ?: 0
             SegmentedListItem(
-                shapes = shapes, modifier = modifier, enabled = enabled,
+                shapes = shapes, modifier = modifier, enabled = enabled, colors = segmentedItemColors(),
                 leadingContent = { Icon(painterResource(item.icon), null) },
                 supportingContent = {
                     Column {
@@ -177,8 +193,8 @@ fun SettingsInfo(item: SettingsItem.Info, modifier: Modifier = Modifier) {
     val content = resolveText(item.contentRes, item.content?.invoke())
     val colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
     val body = @Composable {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Icon(painterResource(item.icon ?: R.drawable.ic_about), null)
+        Row(Modifier.padding(16.dp)) {
+            Icon(painterResource(item.icon ?: R.drawable.ic_about), null, Modifier.padding(top = 2.dp))
             Text(
                 (content ?: "").toAnnotatedString(item.linkClicked),
                 modifier = Modifier.weight(1f).padding(horizontal = 16.dp),

@@ -44,8 +44,8 @@ fun MessageCard(
     val colors = CardDefaults.cardColors(containerColor = containerColor)
     val body = @Composable {
         Column(Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (tintIcon) Icon(painterResource(icon), null)
+            Row {
+                if (tintIcon) Icon(painterResource(icon), null, Modifier.padding(top = 2.dp))
                 else Image(painterResource(icon), null, Modifier.size(40.dp))
                 Column(Modifier.weight(1f).padding(start = 16.dp)) {
                     title?.let { Text(it, style = MaterialTheme.typography.titleMedium) }

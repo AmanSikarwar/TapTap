@@ -32,6 +32,7 @@ fun <C> LazyListScope.expandableGroups(
             SegmentedListItem(
                 onClick = { if (isOpen) expanded.remove(packageName) else expanded.add(packageName) },
                 shapes = ListItemDefaults.segmentedShapes(index, groups.size),
+                colors = segmentedItemColors(),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = ListItemDefaults.SegmentedGap / 2).animateItem(),
                 leadingContent = { AppIcon(packageName) },
                 trailingContent = { Icon(painterResource(R.drawable.ic_chevron_expand), null, Modifier.rotate(rotation)) }

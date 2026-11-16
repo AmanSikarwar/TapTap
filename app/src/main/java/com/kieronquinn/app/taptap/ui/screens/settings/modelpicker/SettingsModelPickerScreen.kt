@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.modelpicker
 
+import com.kieronquinn.app.taptap.ui.compose.segmentedItemColors
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Tab
@@ -63,7 +65,7 @@ fun SettingsModelPickerScreen(viewModel: SettingsModelPickerViewModel, onRestart
         }
         is State.Loaded -> Column(Modifier.fillMaxSize()) {
             s.deviceSpecs?.let { DeviceCard(it) }
-            PrimaryTabRow(selectedTabIndex = s.selectedTab ?: 0) {
+            PrimaryTabRow(selectedTabIndex = s.selectedTab ?: 0, containerColor = Color.Transparent) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
                         selected = index == (s.selectedTab ?: 0),
@@ -88,8 +90,10 @@ fun SettingsModelPickerScreen(viewModel: SettingsModelPickerViewModel, onRestart
                             val index = models.indexOf(item)
                             val description = stringResource(item.model.descriptionRes)
                             SegmentedListItem(
+                                selected = item.selected,
                                 onClick = { viewModel.onModelSelected(item.model) },
                                 shapes = ListItemDefaults.segmentedShapes(index, models.size),
+                                colors = segmentedItemColors(),
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = ListItemDefaults.SegmentedGap / 2),
                                 supportingContent = {
                                     Text(
