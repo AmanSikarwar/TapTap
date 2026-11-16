@@ -4,6 +4,9 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
@@ -20,13 +23,22 @@ import androidx.navigation3.runtime.NavEntryDecorator
 private const val DURATION = 400
 private val easing = CubicBezierEasing(0.2f, 0f, 0f, 1f)
 
+private fun <T : Any> AnimatedContentTransitionScope<Scene<T>>.isReplace(): Boolean {
+    val target = targetState.entries.lastOrNull()?.contentKey ?: return false
+    return targetState.previousEntries.isEmpty() && initialState.previousEntries.none { it.contentKey == target }
+}
+
+private fun fadeThrough(): ContentTransform =
+    (fadeIn(tween(210, delayMillis = 90)) + scaleIn(tween(210, delayMillis = 90), initialScale = 0.92f)) togetherWith
+        fadeOut(tween(90))
+
 fun <T : Any> slideForward(): AnimatedContentTransitionScope<Scene<T>>.() -> ContentTransform = {
-    slideInHorizontally(tween(DURATION, easing = easing)) { it } togetherWith
+    if (isReplace()) fadeThrough() else slideInHorizontally(tween(DURATION, easing = easing)) { it } togetherWith
         slideOutHorizontally(tween(DURATION, easing = easing)) { -it / 4 }
 }
 
 fun <T : Any> slideBack(): AnimatedContentTransitionScope<Scene<T>>.() -> ContentTransform = {
-    (slideInHorizontally(tween(DURATION, easing = easing)) { -it / 4 } togetherWith
+    if (isReplace()) fadeThrough() else (slideInHorizontally(tween(DURATION, easing = easing)) { -it / 4 } togetherWith
         slideOutHorizontally(tween(DURATION, easing = easing)) { it }).apply { targetContentZIndex = -1f }
 }
 
