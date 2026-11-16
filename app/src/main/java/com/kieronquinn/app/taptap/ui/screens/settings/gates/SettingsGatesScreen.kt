@@ -145,7 +145,7 @@ fun SettingsGatesScreen(viewModel: SettingsGatesViewModel, events: Flow<GatesEve
                             description = item.gate.description,
                             selected = item == selected,
                             onLongClick = { select(if (item == selected) null else item) },
-                            modifier = Modifier.animateItem().reorderable(reorder, index),
+                            modifier = reorderable(reorder, index),
                             reorderHandle = Modifier.reorderHandle(reorder) { items.indexOf(item) },
                             trailing = {
                                 Switch(checked = enabled, onCheckedChange = {

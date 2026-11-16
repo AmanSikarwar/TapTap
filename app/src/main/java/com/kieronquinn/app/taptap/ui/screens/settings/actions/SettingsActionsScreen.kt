@@ -175,7 +175,7 @@ fun SettingsActionsScreen(
                             selected = item == selected,
                             onLongClick = { select(if (item == selected) null else item) },
                             onWhenClick = { viewModel.onWhenGateChipClicked(item.action) },
-                            modifier = Modifier.animateItem().reorderable(reorder, index),
+                            modifier = reorderable(reorder, index),
                             handle = Modifier.reorderHandle(reorder) { items.indexOf(item) }
                         )
                     }

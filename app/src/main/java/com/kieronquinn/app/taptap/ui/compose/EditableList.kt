@@ -8,6 +8,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -22,7 +25,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -110,7 +117,9 @@ fun Modifier.reorderHandle(state: ReorderState, index: () -> Int) = pointerInput
     )
 }
 
-fun Modifier.reorderable(state: ReorderState, index: Int) = this
+@Composable
+fun LazyItemScope.reorderable(state: ReorderState, index: Int) = Modifier
+    .animateItem(placementSpec = if (state.draggingIndex == index) null else spring(visibilityThreshold = IntOffset.VisibilityThreshold))
     .zIndex(if (state.draggingIndex == index) 1f else 0f)
     .graphicsLayer {
         if (state.draggingIndex == index) {
@@ -145,42 +154,46 @@ fun EditableCard(
         colors = CardDefaults.cardColors(containerColor = container),
         border = if (selected) BorderStroke(2.dp, colors.primary) else null
     ) {
-        Row(
-            Modifier
-                .combinedClickable(onClick = onLongClick, onLongClick = onLongClick)
-                .padding(start = 16.dp, top = 16.dp, bottom = 16.dp, end = 4.dp)
-        ) {
-            Box(Modifier.size(40.dp).clip(CircleShape).background(badge), contentAlignment = Alignment.Center) {
-                Crossfade(selected) {
-                    Icon(
-                        painterResource(if (it) R.drawable.ic_check else icon),
-                        null,
-                        Modifier.size(24.dp),
-                        tint = badgeContent
-                    )
+        Row(Modifier.height(IntrinsicSize.Min)) {
+            Row(
+                Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .combinedClickable(onClick = onLongClick, onLongClick = onLongClick)
+                    .padding(start = 16.dp, top = 16.dp, bottom = 16.dp)
+            ) {
+                Box(Modifier.size(40.dp).clip(CircleShape).background(badge), contentAlignment = Alignment.Center) {
+                    Crossfade(selected) {
+                        Icon(
+                            painterResource(if (it) R.drawable.ic_check else icon),
+                            null,
+                            Modifier.size(24.dp),
+                            tint = badgeContent
+                        )
+                    }
+                }
+                Column(Modifier.weight(1f).padding(start = 16.dp, end = 4.dp)) {
+                    Text(title, style = MaterialTheme.typography.titleMedium)
+                    description?.takeIf { it.isNotEmpty() }?.let {
+                        Text(
+                            it.toAnnotatedString(),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = colors.onSurfaceVariant,
+                            maxLines = if (selected) Int.MAX_VALUE else 3,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.animateContentSize()
+                        )
+                    }
+                    chips?.let {
+                        FlowRow(
+                            Modifier.padding(top = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) { it() }
+                    }
                 }
             }
-            Column(Modifier.weight(1f).padding(start = 16.dp, end = 4.dp)) {
-                Text(title, style = MaterialTheme.typography.titleMedium)
-                description?.takeIf { it.isNotEmpty() }?.let {
-                    Text(
-                        it.toAnnotatedString(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = colors.onSurfaceVariant,
-                        maxLines = if (selected) Int.MAX_VALUE else 3,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.animateContentSize()
-                    )
-                }
-                chips?.let {
-                    FlowRow(
-                        Modifier.padding(top = 4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) { it() }
-                }
-            }
-            Row(Modifier.align(Alignment.CenterVertically), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.align(Alignment.CenterVertically).padding(end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 trailing?.invoke()
                 reorderHandle?.let {
                     Icon(
