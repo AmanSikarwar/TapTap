@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.ui.compose.SetupScaffold
 import com.kieronquinn.app.taptap.ui.compose.TintedLottie
-import com.kieronquinn.app.taptap.ui.screens.setup.info.InfoCard
+import com.kieronquinn.app.taptap.ui.compose.MessageCard
 
 @Composable
 fun SetupCompleteScreen(viewModel: SetupCompleteViewModel) {
@@ -23,7 +23,7 @@ fun SetupCompleteScreen(viewModel: SetupCompleteViewModel) {
             modifier = Modifier.size(240.dp), iterations = 1
         )
         Text(stringResource(R.string.setup_complete_title), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
-        InfoCard(R.drawable.ic_taptap_logo, stringResource(R.string.setup_complete_card))
+        MessageCard(R.drawable.ic_taptap_logo, stringResource(R.string.setup_complete_card), Modifier.padding(top = 16.dp))
         Button(onClick = viewModel::onCloseClicked, modifier = Modifier.padding(top = 16.dp)) {
             Text(stringResource(R.string.close))
         }
