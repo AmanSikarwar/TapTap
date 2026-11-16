@@ -160,7 +160,7 @@ fun EditableCard(
                     )
                 }
             }
-            Column(Modifier.weight(1f).padding(start = 16.dp, end = 8.dp)) {
+            Column(Modifier.weight(1f).padding(start = 16.dp, end = 4.dp)) {
                 Text(title, style = MaterialTheme.typography.titleMedium)
                 description?.takeIf { it.isNotEmpty() }?.let {
                     Text(
@@ -174,7 +174,7 @@ fun EditableCard(
                 }
                 chips?.let {
                     FlowRow(
-                        Modifier.padding(top = 8.dp),
+                        Modifier.padding(top = 4.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) { it() }
@@ -186,7 +186,7 @@ fun EditableCard(
                     Icon(
                         painterResource(R.drawable.ic_drag_handle),
                         stringResource(R.string.reorder),
-                        it.padding(12.dp).size(24.dp),
+                        it.padding(horizontal = 8.dp, vertical = 12.dp).size(24.dp),
                         tint = colors.onSurfaceVariant
                     )
                 }

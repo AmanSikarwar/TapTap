@@ -1,11 +1,14 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions
 
+import androidx.compose.ui.platform.LocalResources
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,7 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -56,7 +58,7 @@ import com.kieronquinn.app.taptap.R
 import com.kieronquinn.app.taptap.models.action.ActionRequirement
 import com.kieronquinn.app.taptap.models.action.TapTapUIAction
 import com.kieronquinn.app.taptap.ui.compose.EditableCard
-import com.kieronquinn.app.taptap.ui.compose.MessageCard
+import com.kieronquinn.app.taptap.ui.compose.HelpBanner
 import com.kieronquinn.app.taptap.ui.compose.containerBottomPadding
 import com.kieronquinn.app.taptap.ui.compose.rememberReorderState
 import com.kieronquinn.app.taptap.ui.compose.reorderHandle
@@ -162,10 +164,9 @@ fun SettingsActionsScreen(
             ) {
                 itemsIndexed(items, key = { _, item -> System.identityHashCode(item) }) { index, item ->
                     when (item) {
-                        is SettingsActionsItem.Header -> MessageCard(
-                            R.drawable.ic_about,
-                            stringResource(item.contentRes),
-                            Modifier.padding(16.dp),
+                        is SettingsActionsItem.Header -> HelpBanner(
+                            LocalResources.current.getText(item.contentRes),
+                            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                             onClick = item.onClick,
                             onDismiss = item.onCloseClick
                         )
@@ -206,11 +207,14 @@ private fun ActionCard(
         reorderHandle = handle,
         chips = {
             requirement?.let {
-                SuggestionChip(
-                    onClick = {},
-                    label = { Text(stringResource(it.label)) },
-                    icon = { Icon(painterResource(it.icon), null, Modifier.size(18.dp)) }
-                )
+                Row(
+                    Modifier.padding(top = 8.dp).height(32.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(painterResource(it.icon), null, Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(it.label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
             }
             AssistChip(
                 onClick = onWhenClick,

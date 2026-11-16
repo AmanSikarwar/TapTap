@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.kieronquinn.app.taptap.R
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -67,5 +68,42 @@ fun MessageCard(
         Card(onClick = onClick, modifier = cardModifier, colors = colors, shape = MaterialTheme.shapes.extraLarge) { body() }
     } else {
         Card(modifier = cardModifier, colors = colors, shape = MaterialTheme.shapes.extraLarge) { body() }
+    }
+}
+
+@Composable
+fun HelpBanner(text: CharSequence, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, onDismiss: (() -> Unit)? = null) {
+    val body = text.toString().substringBeforeLast('\n').takeIf { onClick != null } ?: text
+    val hint = text.toString().substringAfterLast('\n', "").takeIf { onClick != null && it.isNotBlank() }
+    Card(
+        onClick = { onClick?.invoke() },
+        enabled = onClick != null,
+        modifier = modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+            disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    ) {
+        Row(Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp, end = 4.dp)) {
+            Icon(painterResource(R.drawable.ic_about), null, Modifier.padding(top = 2.dp).size(20.dp))
+            Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
+                Text(
+                    body.toAnnotatedString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = if (onClick != null) 2 else Int.MAX_VALUE,
+                    overflow = TextOverflow.Ellipsis
+                )
+                hint?.let {
+                    Text(it, Modifier.padding(top = 4.dp), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                }
+            }
+            onDismiss?.let {
+                IconButton(onClick = it, Modifier.size(32.dp)) {
+                    Icon(painterResource(R.drawable.ic_dismiss), stringResource(R.string.close), Modifier.size(18.dp))
+                }
+            }
+        }
     }
 }

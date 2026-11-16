@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.gates
 
+import androidx.compose.ui.platform.LocalResources
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,7 +44,7 @@ import org.koin.compose.viewmodel.koinActivityViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import com.kieronquinn.app.taptap.models.gate.TapTapUIGate
 import com.kieronquinn.app.taptap.ui.compose.EditableCard
-import com.kieronquinn.app.taptap.ui.compose.MessageCard
+import com.kieronquinn.app.taptap.ui.compose.HelpBanner
 import com.kieronquinn.app.taptap.ui.compose.containerBottomPadding
 import com.kieronquinn.app.taptap.ui.compose.rememberReorderState
 import com.kieronquinn.app.taptap.ui.compose.reorderHandle
@@ -130,10 +131,9 @@ fun SettingsGatesScreen(viewModel: SettingsGatesViewModel, events: Flow<GatesEve
         ) {
             itemsIndexed(items, key = { _, item -> System.identityHashCode(item) }) { index, item ->
                 when (item) {
-                    is SettingsGatesItem.Header -> MessageCard(
-                        R.drawable.ic_about,
-                        stringResource(item.contentRes),
-                        Modifier.padding(16.dp),
+                    is SettingsGatesItem.Header -> HelpBanner(
+                        LocalResources.current.getText(item.contentRes),
+                        Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                         onClick = item.onClick,
                         onDismiss = item.onCloseClick
                     )
