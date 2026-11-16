@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.navigation
 
+import androidx.compose.material3.MaterialTheme
 import androidx.activity.compose.LocalActivity
 import android.app.Activity
 import androidx.activity.compose.BackHandler
@@ -51,9 +52,13 @@ fun TapTapApp() {
         onBack = { scope.launch { navigation.navigateBack() } },
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator()
+            rememberViewModelStoreNavEntryDecorator(),
+            rememberBackgroundNavEntryDecorator(MaterialTheme.colorScheme.surface)
         ),
         sceneStrategies = listOf(DialogSceneStrategy(), BottomSheetSceneStrategy()),
+        transitionSpec = slideForward(),
+        popTransitionSpec = slideBack(),
+        predictivePopTransitionSpec = slidePredictiveBack(),
         entryProvider = entryProvider {
             entry<RootKey.Decision> {
                 val viewModel = koinViewModel<DecisionViewModel>()

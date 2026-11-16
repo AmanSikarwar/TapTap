@@ -1,5 +1,9 @@
 package com.kieronquinn.app.taptap.ui.screens.container
 
+import com.kieronquinn.app.taptap.ui.navigation.rememberBackgroundNavEntryDecorator
+import com.kieronquinn.app.taptap.ui.navigation.slideBack
+import com.kieronquinn.app.taptap.ui.navigation.slideForward
+import com.kieronquinn.app.taptap.ui.navigation.slidePredictiveBack
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -167,9 +171,13 @@ fun ContainerScreen(viewModel: ContainerViewModel = koinViewModel()) {
                     onBack = { scope.launch { navigation.navigateBack() } },
                     entryDecorators = listOf(
                         rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator()
+                        rememberViewModelStoreNavEntryDecorator(),
+                        rememberBackgroundNavEntryDecorator(MaterialTheme.colorScheme.surfaceContainer)
                     ),
                     sceneStrategies = listOf(DialogSceneStrategy(), BottomSheetSceneStrategy()),
+                    transitionSpec = slideForward(),
+                    popTransitionSpec = slideBack(),
+                    predictivePopTransitionSpec = slidePredictiveBack(),
                     entryProvider = containerEntries(context)
                 )
             }

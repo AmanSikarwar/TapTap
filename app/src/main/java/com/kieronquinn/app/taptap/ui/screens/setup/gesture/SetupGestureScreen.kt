@@ -1,5 +1,10 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.gesture
 
+import androidx.compose.material3.BottomSheetDefaults
+import com.kieronquinn.app.taptap.ui.navigation.rememberBackgroundNavEntryDecorator
+import com.kieronquinn.app.taptap.ui.navigation.slideBack
+import com.kieronquinn.app.taptap.ui.navigation.slideForward
+import com.kieronquinn.app.taptap.ui.navigation.slidePredictiveBack
 import androidx.compose.ui.platform.LocalResources
 import android.os.Build
 import androidx.activity.compose.BackHandler
@@ -168,8 +173,12 @@ fun SetupGestureScreen(viewModel: SetupGestureViewModel = koinViewModel()) {
                     onBack = { viewModel.onConfigurationBackPressed() },
                     entryDecorators = listOf(
                         rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator()
+                        rememberViewModelStoreNavEntryDecorator(),
+                        rememberBackgroundNavEntryDecorator(BottomSheetDefaults.ContainerColor)
                     ),
+                    transitionSpec = slideForward(),
+                    popTransitionSpec = slideBack(),
+                    predictivePopTransitionSpec = slidePredictiveBack(),
                     entryProvider = entryProvider {
                         entry<GestureConfigurationKey.Configuration> { SetupGestureConfigurationScreen() }
                         entry<GestureConfigurationKey.ModelPicker> {
