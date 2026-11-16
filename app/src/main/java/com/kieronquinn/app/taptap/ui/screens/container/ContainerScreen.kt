@@ -45,6 +45,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -161,8 +163,10 @@ fun ContainerScreen(viewModel: ContainerViewModel = koinViewModel()) {
                             (fadeOut(fadeOutSpec) + slideOutVertically { -it / 2 }) using
                             SizeTransform(clip = false)
                     }
+                    val label = stringResource(shown.labelRes)
                     ExtendedFloatingActionButton(
                         onClick = { shared.onFabClicked(shown) },
+                        modifier = Modifier.semantics { contentDescription = label },
                         containerColor = container,
                         contentColor = content,
                         icon = { AnimatedContent(shown.iconRes, transitionSpec = swap) { Icon(painterResource(it), null) } },

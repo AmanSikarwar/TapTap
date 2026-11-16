@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -140,8 +142,10 @@ private fun CrashReportingScreen(report: String, onClose: () -> Unit, onSave: ()
             )
         },
         floatingActionButton = {
+            val saveLabel = stringResource(R.string.crash_reporting_save)
             ExtendedFloatingActionButton(
                 onClick = onSave,
+                modifier = Modifier.semantics { contentDescription = saveLabel },
                 icon = { Icon(painterResource(R.drawable.ic_save), null) },
                 text = { Text(stringResource(R.string.crash_reporting_save)) }
             )
