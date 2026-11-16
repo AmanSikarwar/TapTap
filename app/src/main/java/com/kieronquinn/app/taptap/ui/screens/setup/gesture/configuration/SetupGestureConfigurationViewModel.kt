@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.gesture.configuration
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.components.navigation.GestureConfigurationNavigation
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
@@ -27,7 +29,7 @@ class SetupGestureConfigurationViewModelImpl(private val navigation: GestureConf
 
     override fun onDeviceSizeClicked() {
         viewModelScope.launch {
-            navigation.navigate(SetupGestureConfigurationFragmentDirections.actionSetupGestureConfigurationFragmentToSetupGestureModelPicker())
+            navigation.navigate(GestureConfigurationKey.ModelPicker)
         }
     }
 

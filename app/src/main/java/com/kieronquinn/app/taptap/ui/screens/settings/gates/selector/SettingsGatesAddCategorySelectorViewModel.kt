@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.gates.selector
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.components.navigation.ContainerNavigation
@@ -58,10 +60,7 @@ class SettingsGatesAddCategorySelectorViewModelImpl(private val navigation: Cont
 
     override fun onCategoryClicked(category: TapTapGateCategory, isRequirement: Boolean) {
         viewModelScope.launch {
-            navigation.navigate(
-                SettingsGatesAddCategorySelectorFragmentDirections
-                    .actionSettingsGatesAddCategorySelectorFragmentToSettingsGatesGateSelectorFragment(category, isRequirement)
-            )
+            navigation.navigate(ContainerKey.GatesSelector(category, isRequirement))
         }
     }
 

@@ -1,38 +1,36 @@
 package com.kieronquinn.app.taptap.ui.activities
 
 import android.content.res.Configuration
-import android.os.Build
-import android.view.WindowManager
-import androidx.annotation.RequiresApi
-import com.kieronquinn.app.taptap.R
-import com.kieronquinn.app.taptap.databinding.ActivityReachabilityBinding
-import com.kieronquinn.app.taptap.ui.base.BoundActivity
-import com.kieronquinn.app.taptap.ui.screens.reachability.ReachabilityFragment
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import com.kieronquinn.app.taptap.ui.screens.reachability.ReachabilityScreen
+import com.kieronquinn.app.taptap.ui.screens.reachability.ReachabilityViewModel
+import com.kieronquinn.app.taptap.ui.theme.TapTapTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ReachabilityActivity: BoundActivity<ActivityReachabilityBinding>(ActivityReachabilityBinding::inflate) {
+class ReachabilityActivity: ComponentActivity() {
 
     companion object {
         const val KEY_PACKAGE_NAME = "package_name"
     }
 
-    private val app by lazy {
-        intent.getStringExtra(KEY_PACKAGE_NAME)
+    private val viewModel by viewModel<ReachabilityViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent { TapTapTheme { ReachabilityScreen(viewModel) } }
     }
 
-    private val fragment
-        get() = supportFragmentManager.findFragmentById(R.id.fragment_reachability) as? ReachabilityFragment
-
-    override fun onWindowAttributesChanged(params: WindowManager.LayoutParams?) {
-        super.onWindowAttributesChanged(params)
-        fragment?.onWindowAttributesChanged(window?.decorView?.height ?: return)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration) {
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
-        if(!isInMultiWindowMode) {
-            fragment?.onExitMultiWindow(app)
+        if (isInMultiWindowMode) return
+        (viewModel.getCurrentApp() ?: intent.getStringExtra(KEY_PACKAGE_NAME))?.let {
+            packageManager.getLaunchIntentForPackage(it)?.run(::startActivity)
         }
+        finishAndRemoveTask()
     }
 
 }

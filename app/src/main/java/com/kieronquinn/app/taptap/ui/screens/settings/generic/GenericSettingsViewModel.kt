@@ -3,7 +3,6 @@ package com.kieronquinn.app.taptap.ui.screens.settings.generic
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
-import com.google.android.material.slider.LabelFormatter
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
 import kotlinx.coroutines.flow.*
 
@@ -66,7 +65,7 @@ abstract class GenericSettingsViewModel : ViewModel() {
             val minimumValue: Float = 0f,
             val maximumValue: Float = 10f,
             val stepSize: Float? = null,
-            val labelFormatter: LabelFormatter? = null,
+            val labelFormatter: ((Float) -> String)? = null,
             override val isVisible: () -> Boolean = { true },
             override val isEnabled: () -> Boolean = { true }
         ) : SettingsItem(SettingsItemType.SLIDER, isVisible, isEnabled)

@@ -1,12 +1,13 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.info
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.components.navigation.RootNavigation
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
-import com.kieronquinn.app.taptap.ui.screens.decision.DecisionFragmentDirections
 import com.kieronquinn.app.taptap.ui.screens.setup.base.BaseSetupViewModel
 import com.kieronquinn.app.taptap.utils.extensions.hasNotificationPermission
 import kotlinx.coroutines.launch
@@ -31,19 +32,19 @@ class SetupInfoViewModelImpl(private val settings: TapTapSettings, private val n
 
     override fun onSourceClicked() {
         viewModelScope.launch {
-            navigation.navigate(SetupInfoFragmentDirections.actionSetupInfoFragmentToSetupInfoWarningBottomSheetFragment())
+            navigation.navigate(RootKey.SetupInfoWarning)
         }
     }
 
     override fun onNextClicked(context: Context) {
         viewModelScope.launch {
             if(context.hasNotificationPermission()) {
-                navigation.navigate(SetupInfoFragmentDirections.actionSetupInfoFragmentToSetupGestureFragment())
+                navigation.navigate(RootKey.SetupGesture)
             }else{
-                navigation.navigate(SetupInfoFragmentDirections.actionSetupInfoFragmentToSetupNotificationsFragment())
+                navigation.navigate(RootKey.SetupNotifications)
             }
             if(!settings.internetAllowed.exists()) {
-                navigation.navigate(DecisionFragmentDirections.actionGlobalSharedInternetPermissionDialogFragment())
+                navigation.navigate(RootKey.InternetPermission)
             }
         }
     }

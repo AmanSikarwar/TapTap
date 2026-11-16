@@ -1,10 +1,11 @@
 package com.kieronquinn.app.taptap.ui.screens.decision
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavDirections
 import com.kieronquinn.app.taptap.components.navigation.RootNavigation
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
 import com.kieronquinn.app.taptap.repositories.backuprestore.RestoreRepository
@@ -28,28 +29,28 @@ class DecisionViewModelImpl(context: Context, private val rootNavigation: RootNa
     private val _decisionMade = MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply {
         viewModelScope.launch {
             emit(Unit)
-            rootNavigation.navigate(getDestination(context))
+            rootNavigation.replace(getDestination(context))
         }
     }
 
     override val decisionMade = _decisionMade.asSharedFlow()
 
-    private suspend fun getDestination(context: Context): NavDirections {
+    private suspend fun getDestination(context: Context): RootKey {
         return when {
             !context.deviceHasGyroscope() -> {
-                DecisionFragmentDirections.actionDecisionFragmentToNoGyroscopeFragment()
+                RootKey.NoGyroscope
             }
             context.isColumbusEnabled() && !context.isNativeColumbusEnabled() -> {
-                DecisionFragmentDirections.actionDecisionFragmentToDisableColumbusFragment()
+                RootKey.DisableColumbus
             }
             restoreRepository.shouldUpgrade(context) -> {
-                DecisionFragmentDirections.actionDecisionFragmentToSetupUpgradeFragment()
+                RootKey.SetupUpgrade
             }
             settings.hasSeenSetup.get() -> {
-                DecisionFragmentDirections.actionDecisionFragmentToNavGraphSettings()
+                RootKey.Container
             }
             else -> {
-                DecisionFragmentDirections.actionDecisionFragmentToNavGraphSetup()
+                RootKey.SetupLanding
             }
         }
     }

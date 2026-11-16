@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.lowpower
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.viewModelScope
@@ -9,7 +11,6 @@ import com.kieronquinn.app.taptap.components.settings.TapTapSettings
 import com.kieronquinn.app.taptap.components.settings.invert
 import com.kieronquinn.app.taptap.components.sui.SuiProvider
 import com.kieronquinn.app.taptap.ui.screens.settings.generic.GenericSettingsViewModel
-import com.kieronquinn.app.taptap.ui.views.MonetSwitch
 import com.kieronquinn.app.taptap.utils.extensions.ContextHub_hasColumbusNanoApp
 import com.kieronquinn.app.taptap.utils.extensions.Shizuku_requestPermissionIfNeeded
 import com.kieronquinn.app.taptap.utils.extensions.deviceHasContextHub
@@ -30,7 +31,7 @@ abstract class SettingsLowPowerModeViewModel: GenericSettingsViewModel() {
     abstract val switchEnabled: Flow<Boolean>
 
     abstract fun checkShizukuState(context: Context)
-    abstract fun onLowPowerSwitchClicked(switch: MonetSwitch)
+    abstract fun onLowPowerSwitchClicked(context: Context)
     abstract fun onShizukuClicked(context: Context)
     abstract fun onSuiClicked()
 
@@ -70,18 +71,17 @@ class SettingsLowPowerModelViewModelImpl(settings: TapTapSettings, context: Cont
         }
     }
 
-    override fun onLowPowerSwitchClicked(switch: MonetSwitch) {
+    override fun onLowPowerSwitchClicked(context: Context) {
         viewModelScope.launch {
             if(!lowPowerModeSetting.get()) {
                 //Check permission first
                 val permissionGranted = checkPermissions()
                 if(permissionGranted == null){
                     //Shizuku is not running
-                    Toast.makeText(switch.context, R.string.settings_low_power_mode_error_toast, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, R.string.settings_low_power_mode_error_toast, Toast.LENGTH_LONG).show()
                 }
                 if(permissionGranted != true){
                     lowPowerModeSetting.set(false)
-                    switch.isChecked = false
                     return@launch
                 }
             }
@@ -103,7 +103,7 @@ class SettingsLowPowerModelViewModelImpl(settings: TapTapSettings, context: Cont
 
     override fun onShizukuClicked(context: Context) {
         viewModelScope.launch {
-            navigation.navigate(SettingsLowPowerModeFragmentDirections.actionSettingsLowPowerModeFragmentToSettingsLowPowerModeShizukuInfoFragment())
+            navigation.navigate(ContainerKey.ShizukuInfo)
         }
     }
 

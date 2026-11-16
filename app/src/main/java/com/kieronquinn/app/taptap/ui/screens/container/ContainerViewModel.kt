@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.container
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,10 +10,6 @@ import com.kieronquinn.app.taptap.components.navigation.ContainerNavigation
 import com.kieronquinn.app.taptap.components.settings.SETTINGS_VERSION
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
 import com.kieronquinn.app.taptap.repositories.update.UpdateRepository
-import com.kieronquinn.app.taptap.ui.screens.settings.main.SettingsMainFragmentDirections
-import com.kieronquinn.app.taptap.ui.screens.settings.more.SettingsMoreFragmentDirections
-import com.kieronquinn.app.taptap.ui.screens.settings.options.SettingsOptionsFragmentDirections
-import com.kieronquinn.app.taptap.ui.screens.settings.update.SettingsUpdateFragmentDirections
 import com.kieronquinn.app.taptap.utils.extensions.getColumbusSettingAsFlow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,7 +20,7 @@ abstract class ContainerViewModel: ViewModel() {
 
     abstract fun writeSettingsVersion()
     abstract fun setCanShowSnackbar(showSnackbar: Boolean)
-    abstract fun onNavigationItemClicked(id: Int)
+    abstract fun onNavigationItemClicked(key: ContainerKey)
     abstract fun onBackPressed()
     abstract fun onUpdateClicked()
     abstract fun onUpdateDismissed()
@@ -43,13 +41,9 @@ class ContainerViewModelImpl(context: Context, private val settings: TapTapSetti
         canShow && update != null && !dismissed
     }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
-    override fun onNavigationItemClicked(id: Int) {
+    override fun onNavigationItemClicked(key: ContainerKey) {
         viewModelScope.launch {
-            when(id){
-                R.id.menu_bottom_nav_main_gesture -> navigation.navigate(SettingsMainFragmentDirections.actionGlobalSettingsMainFragment())
-                R.id.menu_bottom_nav_main_settings -> navigation.navigate(SettingsOptionsFragmentDirections.actionGlobalSettingsOptionsFragment())
-                R.id.menu_bottom_nav_main_more -> navigation.navigate(SettingsMoreFragmentDirections.actionGlobalSettingsMoreFragment())
-            }
+            navigation.replace(key)
         }
     }
 
@@ -68,7 +62,7 @@ class ContainerViewModelImpl(context: Context, private val settings: TapTapSetti
     override fun onUpdateClicked() {
         val release = gitHubUpdate.value ?: return
         viewModelScope.launch {
-            navigation.navigate(SettingsUpdateFragmentDirections.actionGlobalSettingsUpdateFragment(release))
+            navigation.navigate(ContainerKey.Update(release))
         }
     }
 

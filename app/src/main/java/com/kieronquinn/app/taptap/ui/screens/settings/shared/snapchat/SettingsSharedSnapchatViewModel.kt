@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.snapchat
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -52,7 +54,7 @@ class SettingsSharedSnapchatViewModelImpl(private val snapchatRepository: Snapch
     override fun popBackstack(delay: Boolean) {
         viewModelScope.launch {
             if(delay) delay(250L)
-            navigation.navigateUpTo(R.id.nav_graph_shared_snapchat, true)
+            navigation.navigateUpTo(ContainerKey.Snapchat::class, true)
         }
     }
 

@@ -4,32 +4,52 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Html
-import android.text.util.Linkify
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
 import androidx.documentfile.provider.DocumentFile
 import com.kieronquinn.app.taptap.BuildConfig
 import com.kieronquinn.app.taptap.R
-import com.kieronquinn.app.taptap.databinding.ActivityCrashReportingBinding
-import com.kieronquinn.app.taptap.utils.extensions.themeColor
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import com.kieronquinn.app.taptap.ui.compose.toAnnotatedString
+import com.kieronquinn.app.taptap.ui.theme.TapTapTheme
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 /**
- *  This activity is intentionally barebones - no fragments, Monet, and minimal library use.
+ *  This activity is intentionally barebones - no fragments and minimal library use.
  *  It should be able to handle an incoming crash from the extras, show it and export it.
  */
-class CrashReportingActivity : AppCompatActivity() {
+class CrashReportingActivity : ComponentActivity() {
 
     companion object {
         const val KEY_EXCEPTION = "exception"
         private const val CRASH_REPORT_FILE_TEMPLATE = "tap_tap_crash_report_%s.txt"
     }
 
-    private val saveReport = registerForActivityResult(ActivityResultContracts.CreateDocument()){
+    private val saveReport = registerForActivityResult(ActivityResultContracts.CreateDocument("text/plain")){
         if(it == null) return@registerForActivityResult
         saveCrashReport(it)
     }
@@ -41,28 +61,18 @@ class CrashReportingActivity : AppCompatActivity() {
         })
     }
 
-    private val binding by lazy {
-        ActivityCrashReportingBinding.inflate(layoutInflater)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        setupToolbar()
-        setupCrashHeaderText()
-        setupCrashReportText()
-        setupSaveReportButton()
-    }
-
-    private fun setupCrashHeaderText() = with(binding.crashReportingHeader) {
-        text = Html.fromHtml(
-            getString(R.string.crash_reporting_content_intro),
-            Html.FROM_HTML_MODE_LEGACY
-        )
-        Linkify.addLinks(this, Linkify.ALL)
-        movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkClickListener { _, url ->
-            openLink(url)
-            true
+        enableEdgeToEdge()
+        setContent {
+            TapTapTheme {
+                CrashReportingScreen(
+                    report = crashReport,
+                    onClose = ::finish,
+                    onSave = { saveReport.launch(getFilename()) },
+                    onLink = ::openLink
+                )
+            }
         }
     }
 
@@ -70,23 +80,6 @@ class CrashReportingActivity : AppCompatActivity() {
         startActivity(Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(url)
         })
-    }
-
-    private fun setupCrashReportText() {
-        binding.crashReportingReport.text = crashReport
-    }
-
-    private fun setupSaveReportButton() {
-        binding.crashReportingSave.setOnClickListener {
-            saveReport.launch(getFilename())
-        }
-    }
-
-    private fun setupToolbar() {
-        window.statusBarColor = themeColor(android.R.attr.colorPrimaryDark)
-        binding.crashReportingToolbar.setNavigationOnClickListener {
-            finish()
-        }
     }
 
     private fun createCrashReport(exception: String): String {
@@ -134,4 +127,35 @@ class CrashReportingActivity : AppCompatActivity() {
         return String.format(CRASH_REPORT_FILE_TEMPLATE, dateTimeFormatter.format(time))
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CrashReportingScreen(report: String, onClose: () -> Unit, onSave: () -> Unit, onLink: (String) -> Unit) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.crash_reporting_title)) },
+                navigationIcon = {
+                    IconButton(onClick = onClose) { Icon(painterResource(R.drawable.ic_back), stringResource(R.string.back)) }
+                }
+            )
+        },
+        floatingActionButton = {
+            val saveLabel = stringResource(R.string.crash_reporting_save)
+            ExtendedFloatingActionButton(
+                onClick = onSave,
+                modifier = Modifier.semantics { contentDescription = saveLabel },
+                icon = { Icon(painterResource(R.drawable.ic_save), null) },
+                text = { Text(stringResource(R.string.crash_reporting_save)) }
+            )
+        }
+    ) { padding ->
+        Column(Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(16.dp)) {
+            Text(stringResource(R.string.crash_reporting_content_intro).toAnnotatedString(onLink))
+            SelectionContainer {
+                Text(report, Modifier.padding(top = 16.dp), fontFamily = FontFamily.Monospace, style = MaterialTheme.typography.bodySmall)
+            }
+        }
+    }
 }

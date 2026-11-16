@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.notifications
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -29,7 +31,8 @@ class SetupNotificationsViewModelImpl(
     override fun checkPermission(context: Context) {
         if(context.hasNotificationPermission()){
             viewModelScope.launch {
-                navigation.navigate(SetupNotificationsFragmentDirections.actionSetupNotificationsFragmentToSetupGestureFragment())
+                navigation.navigateUpTo(RootKey.SetupInfo::class)
+            navigation.navigate(RootKey.SetupGesture)
             }
         }
     }

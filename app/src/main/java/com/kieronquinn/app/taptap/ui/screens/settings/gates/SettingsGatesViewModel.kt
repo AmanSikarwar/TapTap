@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.gates
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
@@ -127,7 +129,7 @@ class SettingsGatesViewModelImpl(
 
     override fun onAddGateFabClicked() {
         viewModelScope.launch {
-            navigation.navigate(R.id.action_global_nav_graph_add_gate)
+            navigation.navigate(ContainerKey.GatesAddCategory(false))
         }
     }
 
@@ -244,7 +246,7 @@ class SettingsGatesViewModelImpl(
 
     private fun onHeaderClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsGatesFragmentDirections.actionSettingsGatesFragmentToSettingsGatesHelpBottomSheetFragment())
+            navigation.navigate(ContainerKey.GatesHelp)
         }
     }
 

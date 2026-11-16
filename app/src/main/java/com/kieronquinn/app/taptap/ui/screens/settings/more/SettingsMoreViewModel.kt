@@ -1,6 +1,10 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.more
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Intent
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.kieronquinn.app.taptap.BuildConfig
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.components.navigation.ContainerNavigation
@@ -51,7 +55,7 @@ class SettingsMoreViewModelImpl(
         viewModelScope.launch {
             if(it){
                 //Show the dialog for options
-                navigation.navigate(SettingsMoreFragmentDirections.actionGlobalSettingsSharedInternetPermissionDialogFragment())
+                navigation.navigate(ContainerKey.InternetPermission)
             }else{
                 //Disable settings
                 internetAllowed.set(false)
@@ -70,19 +74,19 @@ class SettingsMoreViewModelImpl(
 
     override fun onBatteryClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMoreFragmentDirections.actionSettingsMoreFragmentToSettingsBatteryFragment())
+            navigation.navigate(ContainerKey.Battery)
         }
     }
 
     override fun onBackupRestoreClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMoreFragmentDirections.actionSettingsMoreFragmentToSettingsBackupRestoreFragment())
+            navigation.navigate(ContainerKey.BackupRestore)
         }
     }
 
     override fun onAboutContributorsClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMoreFragmentDirections.actionSettingsMoreFragmentToSettingsContributionsFragment())
+            navigation.navigate(ContainerKey.Contributions)
         }
     }
 
@@ -104,7 +108,7 @@ class SettingsMoreViewModelImpl(
 
     override fun onAboutLibrariesClicked() {
         viewModelScope.launch {
-            navigation.navigate(SettingsMoreFragmentDirections.actionSettingsMoreFragmentToOssLicensesMenuActivity())
+            navigation.navigate(Intent().setClassName(BuildConfig.APPLICATION_ID, OssLicensesMenuActivity::class.java.name))
         }
     }
 

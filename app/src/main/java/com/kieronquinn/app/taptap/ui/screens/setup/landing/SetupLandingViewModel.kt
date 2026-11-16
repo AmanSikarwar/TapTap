@@ -1,10 +1,11 @@
 package com.kieronquinn.app.taptap.ui.screens.setup.landing
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.components.navigation.NavigationEvent
 import com.kieronquinn.app.taptap.components.navigation.RootNavigation
 import com.kieronquinn.app.taptap.components.settings.TapTapSettings
-import com.kieronquinn.app.taptap.ui.screens.decision.DecisionFragmentDirections
 import com.kieronquinn.app.taptap.ui.screens.setup.base.BaseSetupViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ class SetupLandingViewModelImpl(private val settings: TapTapSettings, private va
 
     override fun onStartClicked() {
         viewModelScope.launch {
-            navigation.navigate(SetupLandingFragmentDirections.actionSetupLandingFragmentToSetupInfoFragment())
+            navigation.navigate(RootKey.SetupInfo)
         }
     }
 

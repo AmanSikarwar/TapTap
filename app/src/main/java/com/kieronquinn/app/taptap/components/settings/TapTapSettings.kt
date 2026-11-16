@@ -31,7 +31,6 @@ interface TapTapSettings {
     val settingsUpgraded: TapTapSetting<Boolean>
 
     //The wallpaper colour to use (< Android 12)
-    val monetColor: TapTapSetting<Int>
 
     //Whether the user has completed or skipped setup
     val hasSeenSetup: TapTapSetting<Boolean>
@@ -180,7 +179,6 @@ class TapTapSettingsImpl(
         const val KEY_ENABLE_CRASH_REPORTING = "enable_crash_reporting"
         const val DEFAULT_ENABLE_CRASH_REPORTING = true
 
-        const val KEY_MONET_COLOR = "monet_color"
 
         const val KEY_SERVICE_ENABLED = "service_enabled"
         const val DEFAULT_SERVICE_ENABLED = false //Gets enabled after skip or during setup
@@ -264,11 +262,6 @@ class TapTapSettingsImpl(
         SHARED_BOOLEAN
     )
 
-    override val monetColor: TapTapSettings.TapTapSetting<Int> = TapTapSettingImpl(
-        KEY_MONET_COLOR,
-        Integer.MAX_VALUE,
-        SHARED_COLOR
-    )
 
     override val serviceEnabled: TapTapSettings.TapTapSetting<Boolean> = TapTapSettingImpl(
         KEY_SERVICE_ENABLED,

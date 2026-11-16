@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions.doubletap
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.R
@@ -90,7 +92,7 @@ class SettingsActionsDoubleViewModelImpl(
 
     override fun onWhenGateChipClicked(action: TapTapUIAction) {
         viewModelScope.launch {
-            navigation.navigate(SettingsActionsDoubleFragmentDirections.actionSettingsActionsDoubleFragmentToSettingsActionsWhenGatesFragment(action, false))
+            navigation.navigate(ContainerKey.WhenGates(action, false))
         }
     }
 
@@ -102,7 +104,7 @@ class SettingsActionsDoubleViewModelImpl(
 
     private fun onHeaderClicked(){
         viewModelScope.launch {
-            navigation.navigate(SettingsActionsDoubleFragmentDirections.actionSettingsActionsDoubleFragmentToSettingsActionsHelpBottomSheetFragment())
+            navigation.navigate(ContainerKey.ActionsHelp)
         }
     }
 

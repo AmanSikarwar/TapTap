@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.selector.quicksetting
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kieronquinn.app.taptap.R
@@ -33,7 +35,7 @@ class SettingsSharedQuickSettingSelectorViewModelImpl(quickSettingsRepository: Q
 
     override fun onQuickSettingClicked() {
         viewModelScope.launch {
-            navigation.navigateUpTo(R.id.nav_graph_shared_picker_quick_setting, true)
+            navigation.navigateUpTo(ContainerKey.QuickSettingPicker::class, true)
         }
     }
 

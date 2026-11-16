@@ -1,5 +1,7 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.shared.shizuku
 
+import com.kieronquinn.app.taptap.ui.navigation.*
+
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -56,7 +58,7 @@ class SettingsSharedShizukuPermissionFlowViewModelImpl(private val navigation: C
 
     override fun popBackstack() {
         viewModelScope.launch {
-            navigation.navigateUpTo(R.id.nav_graph_shared_shizuku_permission_flow, true)
+            navigation.navigateUpTo(ContainerKey.ShizukuPermission::class, true)
         }
     }
 
