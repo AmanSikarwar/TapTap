@@ -1,6 +1,17 @@
 package com.kieronquinn.app.taptap.ui.screens.container
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.ui.graphics.Color
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
@@ -127,14 +138,23 @@ fun ContainerScreen(viewModel: ContainerViewModel = koinViewModel()) {
                 AnimatedVisibility(action != null, enter = scaleIn(), exit = scaleOut()) {
                     val shown = lastAction ?: return@AnimatedVisibility
                     val destructive = shown == ContainerSharedViewModel.FabState.FabAction.DELETE
+                    val colors = MaterialTheme.colorScheme
+                    val effects = MaterialTheme.motionScheme.defaultEffectsSpec<Color>()
+                    val container by animateColorAsState(if (destructive) colors.errorContainer else colors.primaryContainer, effects)
+                    val content by animateColorAsState(if (destructive) colors.onErrorContainer else colors.onPrimaryContainer, effects)
+                    val fadeInSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
+                    val fadeOutSpec = MaterialTheme.motionScheme.fastEffectsSpec<Float>()
+                    val swap: AnimatedContentTransitionScope<*>.() -> ContentTransform = {
+                        (fadeIn(fadeInSpec) + slideInVertically { it / 2 }) togetherWith
+                            (fadeOut(fadeOutSpec) + slideOutVertically { -it / 2 }) using
+                            SizeTransform(clip = false)
+                    }
                     ExtendedFloatingActionButton(
                         onClick = { shared.onFabClicked(shown) },
-                        containerColor = if (destructive) MaterialTheme.colorScheme.errorContainer
-                            else MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = if (destructive) MaterialTheme.colorScheme.onErrorContainer
-                            else MaterialTheme.colorScheme.onPrimaryContainer,
-                        icon = { Icon(painterResource(shown.iconRes), null) },
-                        text = { Text(stringResource(shown.labelRes)) }
+                        containerColor = container,
+                        contentColor = content,
+                        icon = { AnimatedContent(shown.iconRes, transitionSpec = swap) { Icon(painterResource(it), null) } },
+                        text = { AnimatedContent(shown.labelRes, transitionSpec = swap) { Text(stringResource(it)) } }
                     )
                 }
             },
