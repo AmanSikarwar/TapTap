@@ -8,9 +8,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -154,11 +151,10 @@ fun EditableCard(
         colors = CardDefaults.cardColors(containerColor = container),
         border = if (selected) BorderStroke(2.dp, colors.primary) else null
     ) {
-        Row(Modifier.height(IntrinsicSize.Min)) {
+        Row {
             Row(
                 Modifier
                     .weight(1f)
-                    .fillMaxHeight()
                     .combinedClickable(onClick = onLongClick, onLongClick = onLongClick)
                     .padding(start = 16.dp, top = 16.dp, bottom = 16.dp)
             ) {
