@@ -81,11 +81,13 @@ fun SettingsGatesScreen(viewModel: SettingsGatesViewModel, events: Flow<GatesEve
     }
     BackHandler(selected != null) { select(null) }
     LaunchedEffect(viewModel) { viewModel.reloadGates() }
+    var synced by remember { mutableStateOf<State?>(null) }
     LaunchedEffect(state) {
         (state as? State.Loaded)?.let {
             items.clear()
             items.addAll(it.items)
             selected = null
+            synced = it
         }
     }
     LifecycleResumeEffect(viewModel) {
@@ -115,7 +117,7 @@ fun SettingsGatesScreen(viewModel: SettingsGatesViewModel, events: Flow<GatesEve
         }
     }
     when {
-        state is State.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        state is State.Loading || synced !== state -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 LoadingIndicator()
                 Text(stringResource(R.string.settings_gates_loading_gates))

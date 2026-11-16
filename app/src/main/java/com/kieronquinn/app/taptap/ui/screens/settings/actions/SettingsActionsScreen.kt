@@ -102,11 +102,13 @@ fun SettingsActionsScreen(
     }
     BackHandler(selected != null) { select(null) }
     LaunchedEffect(viewModel) { viewModel.reloadActions() }
+    var synced by remember { mutableStateOf<State?>(null) }
     LaunchedEffect(state) {
         (state as? State.Loaded)?.let {
             items.clear()
             items.addAll(it.items)
             selected = null
+            synced = it
         }
     }
     LifecycleResumeEffect(viewModel) {
@@ -148,7 +150,7 @@ fun SettingsActionsScreen(
     Column(Modifier.fillMaxSize()) {
         header?.invoke()
         when {
-            state is State.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            state is State.Loading || synced !== state -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     LoadingIndicator()
                     Text(stringResource(R.string.settings_actions_loading_actions))
