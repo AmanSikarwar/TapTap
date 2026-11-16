@@ -1,7 +1,17 @@
 package com.kieronquinn.app.taptap.ui.compose
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
@@ -123,36 +133,63 @@ fun EditableCard(
     chips: (@Composable () -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null
 ) {
+    val colors = MaterialTheme.colorScheme
+    val container by animateColorAsState(if (selected) colors.secondaryContainer else colors.surfaceBright)
+    val badge by animateColorAsState(if (selected) colors.primary else colors.secondaryContainer)
+    val badgeContent by animateColorAsState(if (selected) colors.onPrimary else colors.onSecondaryContainer)
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp),
         shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(
-            containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer
-            else MaterialTheme.colorScheme.surfaceBright
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 4.dp else 0.dp)
+        colors = CardDefaults.cardColors(containerColor = container),
+        border = if (selected) BorderStroke(2.dp, colors.primary) else null
     ) {
         Row(
             Modifier
-                .combinedClickable(onClick = {}, onLongClick = onLongClick)
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .combinedClickable(onClick = onLongClick, onLongClick = onLongClick)
+                .padding(start = 16.dp, top = 16.dp, bottom = 16.dp, end = 4.dp)
         ) {
-            Icon(painterResource(icon), null)
-            Column(Modifier.weight(1f).padding(horizontal = 16.dp)) {
-                Text(title, style = MaterialTheme.typography.titleMedium)
-                description?.takeIf { it.isNotEmpty() }?.let {
-                    Text(it.toAnnotatedString(), style = MaterialTheme.typography.bodyMedium)
-                }
-                chips?.let {
-                    FlowRow(Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) { it() }
+            Box(Modifier.size(40.dp).clip(CircleShape).background(badge), contentAlignment = Alignment.Center) {
+                Crossfade(selected) {
+                    Icon(
+                        painterResource(if (it) R.drawable.ic_check else icon),
+                        null,
+                        Modifier.size(24.dp),
+                        tint = badgeContent
+                    )
                 }
             }
-            trailing?.invoke()
-            reorderHandle?.let {
-                Icon(painterResource(R.drawable.ic_drag_handle), null, it.padding(12.dp).size(24.dp))
+            Column(Modifier.weight(1f).padding(start = 16.dp, end = 8.dp)) {
+                Text(title, style = MaterialTheme.typography.titleMedium)
+                description?.takeIf { it.isNotEmpty() }?.let {
+                    Text(
+                        it.toAnnotatedString(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = colors.onSurfaceVariant,
+                        maxLines = if (selected) Int.MAX_VALUE else 3,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.animateContentSize()
+                    )
+                }
+                chips?.let {
+                    FlowRow(
+                        Modifier.padding(top = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) { it() }
+                }
+            }
+            Row(Modifier.align(Alignment.CenterVertically), verticalAlignment = Alignment.CenterVertically) {
+                trailing?.invoke()
+                reorderHandle?.let {
+                    Icon(
+                        painterResource(R.drawable.ic_drag_handle),
+                        stringResource(R.string.reorder),
+                        it.padding(12.dp).size(24.dp),
+                        tint = colors.onSurfaceVariant
+                    )
+                }
             }
         }
     }

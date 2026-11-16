@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
@@ -97,6 +98,7 @@ fun SettingsActionsScreen(
         selected = item
         viewModel.onItemSelectionStateChange(item != null)
     }
+    BackHandler(selected != null) { select(null) }
     LaunchedEffect(viewModel) { viewModel.reloadActions() }
     LaunchedEffect(state) {
         (state as? State.Loaded)?.let {

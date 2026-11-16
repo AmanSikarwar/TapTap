@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions.whengates
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -73,6 +74,10 @@ fun SettingsActionsWhenGatesScreen(
     var selected by remember { mutableStateOf<TapTapUIWhenGate?>(null) }
     val listState = rememberLazyListState()
     val context = LocalContext.current
+    BackHandler(selected != null) {
+        selected = null
+        viewModel.onItemSelectionStateChange(false)
+    }
     LaunchedEffect(viewModel) { viewModel.setupWithAction(action, context) }
     LifecycleResumeEffect(viewModel) {
         viewModel.onResume()

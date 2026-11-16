@@ -6,6 +6,7 @@
     <!-- Generic -->
     <string name="search">Search</string>
     <string name="close">Close</string>
+    <string name="reorder">Drag to reorder</string>
     <string name="back">Back</string>
 
     <!-- Setup > Landing -->

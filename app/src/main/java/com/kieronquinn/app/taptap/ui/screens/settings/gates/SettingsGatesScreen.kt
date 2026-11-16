@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.gates
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -77,6 +78,7 @@ fun SettingsGatesScreen(viewModel: SettingsGatesViewModel, events: Flow<GatesEve
         selected = item
         viewModel.onItemSelectionStateChange(item != null)
     }
+    BackHandler(selected != null) { select(null) }
     LaunchedEffect(viewModel) { viewModel.reloadGates() }
     LaunchedEffect(state) {
         (state as? State.Loaded)?.let {

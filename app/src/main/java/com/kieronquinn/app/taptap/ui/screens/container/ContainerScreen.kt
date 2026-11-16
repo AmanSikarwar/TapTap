@@ -126,8 +126,13 @@ fun ContainerScreen(viewModel: ContainerViewModel = koinViewModel()) {
                 if (action != null) lastAction = action
                 AnimatedVisibility(action != null, enter = scaleIn(), exit = scaleOut()) {
                     val shown = lastAction ?: return@AnimatedVisibility
+                    val destructive = shown == ContainerSharedViewModel.FabState.FabAction.DELETE
                     ExtendedFloatingActionButton(
                         onClick = { shared.onFabClicked(shown) },
+                        containerColor = if (destructive) MaterialTheme.colorScheme.errorContainer
+                            else MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = if (destructive) MaterialTheme.colorScheme.onErrorContainer
+                            else MaterialTheme.colorScheme.onPrimaryContainer,
                         icon = { Icon(painterResource(shown.iconRes), null) },
                         text = { Text(stringResource(shown.labelRes)) }
                     )
