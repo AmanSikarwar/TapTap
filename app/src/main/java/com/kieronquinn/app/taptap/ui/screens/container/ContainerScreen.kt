@@ -7,6 +7,8 @@ import com.kieronquinn.app.taptap.ui.navigation.slidePredictiveBack
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
@@ -109,10 +111,16 @@ fun ContainerScreen(viewModel: ContainerViewModel = koinViewModel()) {
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
             topBar = {
                 LargeFlexibleTopAppBar(
-                    title = { Text(titleKey?.titleRes?.let { stringResource(it) }.orEmpty()) },
+                    title = {
+                        Crossfade(titleKey?.titleRes, animationSpec = tween(300)) { res ->
+                            Text(res?.let { stringResource(it) }.orEmpty())
+                        }
+                    },
                     navigationIcon = {
-                        if (backStack.size > 1) IconButton(onClick = { scope.launch { navigation.navigateBack() } }) {
-                            Icon(painterResource(R.drawable.ic_back), stringResource(R.string.back))
+                        AnimatedVisibility(backStack.size > 1, enter = fadeIn(tween(300)), exit = fadeOut(tween(300))) {
+                            IconButton(onClick = { scope.launch { navigation.navigateBack() } }) {
+                                Icon(painterResource(R.drawable.ic_back), stringResource(R.string.back))
+                            }
                         }
                     },
                     actions = { topBarActions.actions.value?.second?.invoke(this) },

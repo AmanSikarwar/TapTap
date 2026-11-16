@@ -33,13 +33,13 @@ private fun fadeThrough(): ContentTransform =
         fadeOut(tween(90))
 
 fun <T : Any> slideForward(): AnimatedContentTransitionScope<Scene<T>>.() -> ContentTransform = {
-    if (isReplace()) fadeThrough() else slideInHorizontally(tween(DURATION, easing = easing)) { it } togetherWith
-        slideOutHorizontally(tween(DURATION, easing = easing)) { -it / 4 }
+    if (isReplace()) fadeThrough() else (slideInHorizontally(tween(DURATION, easing = easing)) { it } + fadeIn(tween(DURATION))) togetherWith
+        (slideOutHorizontally(tween(DURATION, easing = easing)) { -it / 4 } + fadeOut(tween(DURATION)))
 }
 
 fun <T : Any> slideBack(): AnimatedContentTransitionScope<Scene<T>>.() -> ContentTransform = {
-    if (isReplace()) fadeThrough() else (slideInHorizontally(tween(DURATION, easing = easing)) { -it / 4 } togetherWith
-        slideOutHorizontally(tween(DURATION, easing = easing)) { it }).apply { targetContentZIndex = -1f }
+    if (isReplace()) fadeThrough() else ((slideInHorizontally(tween(DURATION, easing = easing)) { -it / 4 } + fadeIn(tween(DURATION))) togetherWith
+        (slideOutHorizontally(tween(DURATION, easing = easing)) { it } + fadeOut(tween(DURATION)))).apply { targetContentZIndex = -1f }
 }
 
 fun <T : Any> slidePredictiveBack(): AnimatedContentTransitionScope<Scene<T>>.(Int) -> ContentTransform = {
