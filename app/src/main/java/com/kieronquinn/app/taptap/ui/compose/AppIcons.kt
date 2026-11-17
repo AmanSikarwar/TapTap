@@ -6,7 +6,13 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.annotation.DrawableRes
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import com.kieronquinn.app.taptap.R
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -40,3 +46,7 @@ fun ComponentIcon(component: ComponentName, size: Dp = 40.dp) = AsyncIcon(compon
         ?: runCatching { packageManager.getServiceInfo(component, 0).loadIcon(packageManager) }.getOrNull()
         ?: packageManager.getApplicationIcon(component.packageName)
 }
+
+@Composable
+fun RequirementIcon(@DrawableRes icon: Int, modifier: Modifier = Modifier, tint: Color = LocalContentColor.current) =
+    Icon(painterResource(icon), null, modifier, tint = if (icon == R.drawable.ic_shizuku) Color.Unspecified else tint)

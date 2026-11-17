@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions
 
+import com.kieronquinn.app.taptap.ui.compose.RequirementIcon
 import androidx.compose.ui.platform.LocalResources
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
@@ -214,7 +215,7 @@ private fun ActionCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Icon(painterResource(it.icon), null, Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    RequirementIcon(it.icon, Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text(stringResource(it.label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
