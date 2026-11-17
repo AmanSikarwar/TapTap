@@ -29,7 +29,16 @@ Tap, Tap also tries to be easy on the battery, only running the gesture detectio
 
 ## Screenshots
 
-[![Tap, Tap](https://i.imgur.com/oN3Iimol.png)](https://i.imgur.com/oN3Iimo.png)
+<p>
+  <img src="screenshots/gesture.png" width="32%" alt="Gesture" />
+  <img src="screenshots/actions.png" width="32%" alt="Double Tap Actions" />
+  <img src="screenshots/gates.png" width="32%" alt="Gates" />
+</p>
+<p>
+  <img src="screenshots/settings.png" width="32%" alt="Settings" />
+  <img src="screenshots/model.png" width="32%" alt="Device Size" />
+  <img src="screenshots/more.png" width="32%" alt="More" />
+</p>
 
 [Example video, showing launching the camera on double tap](https://streamable.com/4jd1mu)
 
