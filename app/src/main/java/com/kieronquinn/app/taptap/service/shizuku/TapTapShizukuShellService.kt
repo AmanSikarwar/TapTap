@@ -192,6 +192,10 @@ class TapTapShizukuShellService: ITapTapShizukuShellService.Stub() {
         Runtime.getRuntime().exec("input keyevent $keyId")
     }
 
+    override fun callAccessibilitySystemAction(actionId: Int) {
+        Runtime.getRuntime().exec("cmd accessibility call-system-action $actionId")
+    }
+
     override fun setColumbusLogListener(callback: ITapTapColumbusLogCallback?) {
         columbsLogJob?.cancel()
         if(callback != null) {

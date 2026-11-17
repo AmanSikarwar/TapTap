@@ -20,6 +20,8 @@ interface ITapTapShizukuShellService {
 
     void setColumbusLogListener(ITapTapColumbusLogCallback callback) = 6;
 
+    void callAccessibilitySystemAction(int actionId) = 7;
+
     void destroy() = 16777114;
 
 }

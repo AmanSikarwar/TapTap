@@ -377,6 +377,15 @@ enum class TapTapActionDirectory(
         ActionSupportedRequirement.MinSdk(Build.VERSION_CODES.R),
         actionRequirement = arrayOf(ActionRequirement.Accessibility)
     ),
+    ACCESSIBILITY_SHORTCUT_SHIZUKU(
+        ShizukuAccessibilityShortcutAction::class.java,
+        TapTapActionCategory.ACCESSIBILITY,
+        R.string.action_accessibility_shortcut_shizuku,
+        R.string.action_accessibility_shortcut_shizuku_desc,
+        R.drawable.ic_action_accessibility,
+        ActionSupportedRequirement.MinSdk(Build.VERSION_CODES.S),
+        actionRequirement = arrayOf(ActionRequirement.Shizuku)
+    ),
     HAMBURGER(
         HamburgerAction::class.java,
         TapTapActionCategory.BUTTON,
