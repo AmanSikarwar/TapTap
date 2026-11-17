@@ -52,6 +52,9 @@ interface TapTapShizukuServiceRepository {
 
 }
 
+//Bump when ITapTapShizukuShellService changes so Shizuku restarts the running daemon
+private const val SHELL_SERVICE_REVISION = 1
+
 class TapTapShizukuServiceRepositoryImpl(
     context: Context,
     scope: Scope,
@@ -77,7 +80,7 @@ class TapTapShizukuServiceRepositoryImpl(
     ).apply {
         processNameSuffix("shizukushellservice")
         debuggable(BuildConfig.DEBUG)
-        version(BuildConfig.VERSION_CODE)
+        version(BuildConfig.VERSION_CODE * 100 + SHELL_SERVICE_REVISION)
     }
 
     companion object {

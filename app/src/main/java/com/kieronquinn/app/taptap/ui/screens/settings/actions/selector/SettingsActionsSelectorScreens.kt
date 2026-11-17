@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.actions.selector
 
+import com.kieronquinn.app.taptap.ui.compose.RequirementIcon
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalResources
 import android.content.Context
@@ -108,7 +109,7 @@ private fun ActionSelectorItem(
                 AssistChip(
                     onClick = { onChipClicked(it) },
                     label = { Text(stringResource(it.label)) },
-                    leadingIcon = { Icon(painterResource(it.icon), null, Modifier.size(18.dp)) }
+                    leadingIcon = { RequirementIcon(it.icon, Modifier.size(18.dp)) }
                 )
             }
         }

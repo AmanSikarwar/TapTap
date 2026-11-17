@@ -598,6 +598,13 @@ class ActionsRepositoryImpl(
                 whenGates,
                 emptySet()
             )
+            ACCESSIBILITY_SHORTCUT_SHIZUKU -> ShizukuAccessibilityShortcutAction(
+                serviceLifecycle,
+                context,
+                whenGates,
+                emptySet(),
+                serviceRepository
+            )
             HAMBURGER -> HamburgerAction(serviceLifecycle, context, whenGates, emptySet())
             ACCEPT_CALL -> AcceptCallAction(serviceLifecycle, context, whenGates, emptySet())
             REJECT_CALL -> RejectCallAction(serviceLifecycle, context, whenGates, emptySet())

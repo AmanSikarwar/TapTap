@@ -1,5 +1,6 @@
 package com.kieronquinn.app.taptap.ui.screens.settings.gates.selector
 
+import com.kieronquinn.app.taptap.ui.compose.RequirementIcon
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalResources
 import android.content.Context
@@ -114,7 +115,7 @@ private fun GateSelectorItem(
                 AssistChip(
                     onClick = { onChipClicked(it) },
                     label = { Text(stringResource(it.label)) },
-                    leadingIcon = { Icon(painterResource(it.icon), null, Modifier.size(18.dp)) }
+                    leadingIcon = { RequirementIcon(it.icon, Modifier.size(18.dp)) }
                 )
             }
         }
